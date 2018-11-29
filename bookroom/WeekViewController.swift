@@ -10,7 +10,7 @@
 
 class WeekViewController: UIViewController ,UICollectionViewDelegate, UICollectionViewDataSource{
    
-    @IBOutlet weak var WeekCalendar: UICollectionView!
+    @IBOutlet weak var Weekcalend: UICollectionView!
     
     @IBOutlet weak var MonthLabel: UILabel!
     

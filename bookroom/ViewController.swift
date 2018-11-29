@@ -9,12 +9,36 @@
 
 import UIKit
 import CoreData
+import FirebaseDatabase
+import Foundation
+
+//extension UIToolbar {
+//
+//    func ToolbarPiker(mySelect : Selector) -> UIToolbar {
+//
+//        let toolBar = UIToolbar()
+//
+//        toolBar.barStyle = UIBarStyle.default
+//        toolBar.isTranslucent = true
+//        toolBar.tintColor = UIColor.black
+//        toolBar.sizeToFit()
+//
+//        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: mySelect)
+//        let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+//
+//        toolBar.setItems([ spaceButton, doneButton], animated: false)
+//        toolBar.isUserInteractionEnabled = true
+//
+//        return toolBar
+//    }
+//
+//}
 
 class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate  {
     
     @IBOutlet weak var txtRoom: UITextField!
     
-    @IBOutlet weak var Calendar: UICollectionView!
+    @IBOutlet weak var calend: UICollectionView!
     
     @IBOutlet weak var MonthLabel: UILabel!
     
@@ -22,8 +46,11 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     @IBOutlet weak var txtDate: UITextField!
     
-    @IBOutlet weak var txtFromDate: UITextField!
+    @IBOutlet weak var hours: UILabel!
     
+    @IBAction func stepperhours(_ sender: UIStepper) {
+        hours.text = String(sender.value)
+    }
     private var datePicker: UIDatePicker?
     private var fromDatePicker: UIDatePicker?
     
@@ -35,7 +62,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     var currentMonth = String()
     
-    var NumberOfEmptyBox = Int()    //empthy boxes at the start of the month
+    var NumberOfEmptyBox = Int()    //empty boxes at the start of the month
     
     var NextNumberOfEmptyBox = Int() //empty boxes for the next month
     
@@ -48,6 +75,11 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     var LeapYearCounter = 2
     
     var dayCounter = 0
+    
+    var pickedDate = Date()
+    
+    
+    
     
 /**************************************PICKER VIEW*************************************/
     
@@ -96,6 +128,10 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     override func viewDidLoad() {
         super.viewDidLoad()
         
+//        let ref = Database.database().reference()
+        
+//        ref.child("booker/username").setValue("hallo")
+        
         createPickerView()
         dismissPickerView()
         
@@ -107,22 +143,17 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         GetStartDateDayPosition()
         
         datePicker = UIDatePicker()
-        fromDatePicker = UIDatePicker()
         datePicker?.datePickerMode = .dateAndTime
-        fromDatePicker?.datePickerMode = .dateAndTime
         datePicker?.locale = NSLocale(localeIdentifier: "en_GB") as Locale
-        fromDatePicker?.locale = NSLocale(localeIdentifier: "en_GB") as Locale
+        datePicker?.minuteInterval = 30
         datePicker?.minimumDate = NSDate(timeIntervalSinceNow: 0) as Date
-        fromDatePicker?.minimumDate = NSDate(timeIntervalSinceNow: 0) as Date
+        datePicker?.maximumDate = NSDate(timeIntervalSinceNow: 1209600) as Date
         datePicker?.addTarget(self, action: #selector(ViewController.dateChanged(datePicker:)), for: .valueChanged)
-        fromDatePicker?.addTarget(self, action: #selector(ViewController.fromDateChanged(fromDatePicker:)), for: .valueChanged)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(ViewController.viewTapped(gestureRecognizer:)))
         
-        view.addGestureRecognizer(tapGesture)
-        
         txtDate.inputView = datePicker
-        txtFromDate.inputView = fromDatePicker
-        
+        view.addGestureRecognizer(tapGesture)
+
     }
     
     @objc func viewTapped(gestureRecognizer:UITapGestureRecognizer){
@@ -132,20 +163,21 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     @objc func dateChanged(datePicker:UIDatePicker){
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd/MM/yyyy HH:mm"
+        pickedDate = datePicker.date
         txtDate.text = dateFormatter.string(from: datePicker.date)
-        view.endEditing(true)
+        print("kemur rangt", datePicker.date)
     }
     
-    @objc func fromDateChanged(fromDatePicker:UIDatePicker){
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd/MM/yyyy HH:mm"
-        txtFromDate.text = dateFormatter.string(from: fromDatePicker.date)
+    @objc func dismissPicker() {
+        
         view.endEditing(true)
+        
     }
     
     @IBAction func btnBook () {
         
-        let appDel: AppDelegate = (UIApplication.shared.delegate as! AppDelegate)
+        
+        /*let appDel: AppDelegate = (UIApplication.shared.delegate as! AppDelegate)
         let context = appDel.persistentContainer.viewContext
         
         //LOADING
@@ -157,10 +189,96 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         newUser.setValue("" + txtUsername.text!, forKey: "username")
         newUser.setValue("" + txtRoom.text!, forKey: "room")
         newUser.setValue("" + txtDate.text!, forKey: "datetime")
-        newUser.setValue("" + txtFromDate.text!, forKey: "fromdatetime")
- 
+        newUser.setValue(false, forKey: "available")*/
         
-        do{
+        // var interval = Double()
+        // var date = NSDate()
+        
+        // date from double:
+        // date = NSDate(timeIntervalSince1970: interval)
+        
+        // double from date:
+        // interval = date.timeIntervalSince1970
+        
+        let inthours = hours.text!
+        let inth = (inthours as NSString).integerValue
+        
+        let bookh = inth * 2
+        
+        let ref = Database.database().reference()
+        let r2Ref = Database.database().reference(withPath: "Room 2")
+        let r3Ref = Database.database().reference(withPath: "Room 3")
+        
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd/MM/yyyy HH:mm"
+        dateFormatter.timeZone = .current
+        let bday = dateFormatter.date(from: txtDate.text!)
+        var realDay = bday?.addingTimeInterval(3600)
+        
+        var counter = 0
+        while counter < bookh {
+            
+            print(realDay!)
+            // date to double
+            var dateInt = Double()
+            dateInt = realDay!.timeIntervalSince1970
+            
+            // Add to Firebase
+            ref.childByAutoId().setValue(["date": dateInt, "room": txtRoom.text!, "username": txtUsername.text!, "duration": bookh])
+            
+            if txtRoom.text! == "Room 2" {
+                r2Ref.child(String(format: "%.0f", dateInt) + txtRoom.text!).setValue(["available": false, "username": txtUsername.text!])
+                
+            } else if txtRoom.text! == "Room 3" {
+                r3Ref.child(String(format: "%.0f", dateInt) + txtRoom.text!).setValue(["available": false, "username": txtUsername.text!])
+            }
+            
+            // double to date
+            realDay = Date(timeIntervalSince1970: dateInt)
+            
+            print(dateInt)
+            
+            // add half an hour
+            realDay = realDay?.addingTimeInterval(1800)
+            
+            //let ddate = bdate?.addingTimeInterval(3600)
+            //print("bdate", bdate ?? "nil")
+            //let newdate = bdate?.addingTimeInterval(1800)
+            //print("newsate", newdate ?? "nil")
+           // print("ddate", ddate ?? "nil")
+           /* var com = DateComponents()
+            com.minute = 30
+            let date = bdate*/
+            counter = counter + 1
+        }
+        
+//        ref.childByAutoId().setValue(["date": txtDate.text!, "room": txtRoom.text!, "username": txtUsername.text!, "duration": bookh])
+    
+//
+//        let bhours = NSEntityDescription.insertNewObject(forEntityName: "Duration", into: context)
+//
+//        if bookh == 2 {
+//            bhours.setValue(false, forKey: "hour1")
+//            bhours.setValue(false, forKey: "hour2")
+//        } else if bookh == 4 {
+//            bhours.setValue(false, forKey: "hour1")
+//            bhours.setValue(false, forKey: "hour2")
+//            bhours.setValue(false, forKey: "hour3")
+//            bhours.setValue(false, forKey: "hour4")
+//        } else if bookh == 4 {
+//            bhours.setValue(false, forKey: "hour1")
+//            bhours.setValue(false, forKey: "hour2")
+//            bhours.setValue(false, forKey: "hour3")
+//            bhours.setValue(false, forKey: "hour4")
+//            bhours.setValue(false, forKey: "hour5")
+//            bhours.setValue(false, forKey: "hour6")
+//            bhours.setValue(false, forKey: "hour7")
+//            bhours.setValue(false, forKey: "hour8")
+//        }
+//
+ 
+        /*do{
             //LOADING
             let results = try context.fetch(request)
             if results.count > 0 {
@@ -175,7 +293,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
         catch {
             //PROCESSING ERROR
-        }
+        }*/
     }
     
     
@@ -192,7 +310,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             
             currentMonth = Months[month]
             MonthLabel.text = "\(currentMonth) \(year)"
-            Calendar.reloadData()
+            calend.reloadData()
             
         default:
             Direction = 1
@@ -203,7 +321,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             
             currentMonth = Months[month]
             MonthLabel.text = "\(currentMonth) \(year)"
-            Calendar.reloadData()
+            calend.reloadData()
         }
     }
     
@@ -219,7 +337,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             
             currentMonth = Months[month]
             MonthLabel.text = "\(currentMonth) \(year)"
-            Calendar.reloadData()
+            calend.reloadData()
             
         default:
             month -= 1
@@ -229,7 +347,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             
             currentMonth = Months[month]
             MonthLabel.text = "\(currentMonth) \(year)"
-            Calendar.reloadData()
+            calend.reloadData()
         }
     }
     
@@ -279,7 +397,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Calendar", for: indexPath) as! DateCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "calend", for: indexPath) as! DateCollectionViewCell
         
         cell.backgroundColor = UIColor.cyan
         
@@ -304,7 +422,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             cell.isHidden = true
         }
         
-        if currentMonth == Months[calendar.component(.month, from: date) - 1] && year == calendar.component(.year, from: date) && indexPath.row + 1 - NumberOfEmptyBox == day{
+        if currentMonth == Months[calender.component(.month, from: date) - 1] && year == calender.component(.year, from: date) && indexPath.row + 1 - NumberOfEmptyBox == day{
             cell.backgroundColor = UIColor.red
             // cell.Circle.isHidden = false
             //cell.DrawCircle()
