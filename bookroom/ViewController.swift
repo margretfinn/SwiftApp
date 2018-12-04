@@ -12,28 +12,6 @@ import CoreData
 import FirebaseDatabase
 import Foundation
 
-//extension UIToolbar {
-//
-//    func ToolbarPiker(mySelect : Selector) -> UIToolbar {
-//
-//        let toolBar = UIToolbar()
-//
-//        toolBar.barStyle = UIBarStyle.default
-//        toolBar.isTranslucent = true
-//        toolBar.tintColor = UIColor.black
-//        toolBar.sizeToFit()
-//
-//        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: mySelect)
-//        let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
-//
-//        toolBar.setItems([ spaceButton, doneButton], animated: false)
-//        toolBar.isUserInteractionEnabled = true
-//
-//        return toolBar
-//    }
-//
-//}
-
 class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate  {
     
     @IBOutlet weak var txtRoom: UITextField!
@@ -205,9 +183,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         let bookh = inth * 2
         
-        let ref = Database.database().reference()
-        let r2Ref = Database.database().reference(withPath: "Room 2")
-        let r3Ref = Database.database().reference(withPath: "Room 3")
+//        let ref = Database.database().reference()
+//        let r2Ref = Database.database().reference(withPath: "Room 2")
+//        let r3Ref = Database.database().reference(withPath: "Room 3")
         
         
         let dateFormatter = DateFormatter()
@@ -225,17 +203,19 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             dateInt = realDay!.timeIntervalSince1970
             
             // Add to Firebase
-            ref.childByAutoId().setValue(["date": dateInt, "room": txtRoom.text!, "username": txtUsername.text!, "duration": bookh])
-            
-            if txtRoom.text! == "Room 2" {
-                r2Ref.child(String(format: "%.0f", dateInt) + txtRoom.text!).setValue(["available": false, "username": txtUsername.text!])
-                
-            } else if txtRoom.text! == "Room 3" {
-                r3Ref.child(String(format: "%.0f", dateInt) + txtRoom.text!).setValue(["available": false, "username": txtUsername.text!])
-            }
-            
+//            ref.childByAutoId().setValue(["date": dateInt, "room": txtRoom.text!, "username": txtUsername.text!, "duration": bookh])
+
             // double to date
             realDay = Date(timeIntervalSince1970: dateInt)
+            
+            // Database.database().reference(withPath: self.txtRoom.text!) -> path to Room2 or Room3
+            Database.database().reference(withPath: self.txtRoom.text!).child(String(format: "%.0f", dateInt) + txtRoom.text!).observeSingleEvent(of: .value, with: { (snapshot) in
+                    if snapshot.exists() {
+                        print(self.txtRoom.text! + " is not available at ", realDay!)
+                    } else {
+                        Database.database().reference(withPath: self.txtRoom.text!).child(String(format: "%.0f", dateInt) + self.txtRoom.text!).setValue(["available": false, "username": self.txtUsername.text!])
+                    }})
+            
             
             print(dateInt)
             
@@ -254,28 +234,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
         
 //        ref.childByAutoId().setValue(["date": txtDate.text!, "room": txtRoom.text!, "username": txtUsername.text!, "duration": bookh])
-    
-//
-//        let bhours = NSEntityDescription.insertNewObject(forEntityName: "Duration", into: context)
-//
-//        if bookh == 2 {
-//            bhours.setValue(false, forKey: "hour1")
-//            bhours.setValue(false, forKey: "hour2")
-//        } else if bookh == 4 {
-//            bhours.setValue(false, forKey: "hour1")
-//            bhours.setValue(false, forKey: "hour2")
-//            bhours.setValue(false, forKey: "hour3")
-//            bhours.setValue(false, forKey: "hour4")
-//        } else if bookh == 4 {
-//            bhours.setValue(false, forKey: "hour1")
-//            bhours.setValue(false, forKey: "hour2")
-//            bhours.setValue(false, forKey: "hour3")
-//            bhours.setValue(false, forKey: "hour4")
-//            bhours.setValue(false, forKey: "hour5")
-//            bhours.setValue(false, forKey: "hour6")
-//            bhours.setValue(false, forKey: "hour7")
-//            bhours.setValue(false, forKey: "hour8")
-//        }
 //
  
         /*do{
