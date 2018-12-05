@@ -29,7 +29,11 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     @IBAction func stepperhours(_ sender: UIStepper) {
         hours.text = String(sender.value)
     }
+    
+    @IBOutlet weak var notavail: UILabel!
+    
     private var datePicker: UIDatePicker?
+    private var fromDatePicker: UIDatePicker?
     
     let Months = ["January","February","March","April","May","June","July","August","September","October","November","December"]
     
@@ -58,7 +62,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     
     
-/**************************************PICKER VIEW*************************************/
+    /**************************************PICKER VIEW*************************************/
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
@@ -81,7 +85,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     func createPickerView(){
         let pickerView = UIPickerView()
         pickerView.delegate = self
-      
+        
         txtRoom.inputView = pickerView
     }
     
@@ -99,15 +103,16 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     @objc func dismissKeyboard () {
         view.endEditing(true)
     }
-/**************************************PICKER VIEW*************************************/
+    /**************************************PICKER VIEW*************************************/
     
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        //notavail.isHidden = true
         
-//        let ref = Database.database().reference()
+        //        let ref = Database.database().reference()
         
-//        ref.child("booker/username").setValue("hallo")
+        //        ref.child("booker/username").setValue("hallo")
         
         createPickerView()
         dismissPickerView()
@@ -130,7 +135,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         txtDate.inputView = datePicker
         view.addGestureRecognizer(tapGesture)
-
+        
     }
     
     @objc func viewTapped(gestureRecognizer:UITapGestureRecognizer){
@@ -155,18 +160,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         
         /*let appDel: AppDelegate = (UIApplication.shared.delegate as! AppDelegate)
-        let context = appDel.persistentContainer.viewContext
-        
-        //LOADING
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Users")
-        request.returnsObjectsAsFaults = false
-        
-        //SAVING
-        let newUser = NSEntityDescription.insertNewObject(forEntityName: "Users", into: context)
-        newUser.setValue("" + txtUsername.text!, forKey: "username")
-        newUser.setValue("" + txtRoom.text!, forKey: "room")
-        newUser.setValue("" + txtDate.text!, forKey: "datetime")
-        newUser.setValue(false, forKey: "available")*/
+         let context = appDel.persistentContainer.viewContext
+         */
         
         // var interval = Double()
         // var date = NSDate()
@@ -182,9 +177,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         let bookh = inth * 2
         
-//        let ref = Database.database().reference()
-//        let r2Ref = Database.database().reference(withPath: "Room 2")
-//        let r3Ref = Database.database().reference(withPath: "Room 3")
+        //        let ref = Database.database().reference()
+        //        let r2Ref = Database.database().reference(withPath: "Room 2")
+        //        let r3Ref = Database.database().reference(withPath: "Room 3")
         
         
         let dateFormatter = DateFormatter()
@@ -192,65 +187,90 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         dateFormatter.timeZone = .current
         let bday = dateFormatter.date(from: txtDate.text!)
         var realDay = bday?.addingTimeInterval(3600)
+        var realDay2 = realDay
+        
+        var cantbook = false
         
         var counter = 0
         while counter < bookh {
+            print("EFSTcantbook", cantbook)
             
-            print(realDay!)
             // date to double
             var dateInt = Double()
             dateInt = realDay!.timeIntervalSince1970
             
             // Add to Firebase
-//            ref.childByAutoId().setValue(["date": dateInt, "room": txtRoom.text!, "username": txtUsername.text!, "duration": bookh])
-
+            // ref.childByAutoId().setValue(["date": dateInt, "room": txtRoom.text!, "username": txtUsername.text!, "duration": bookh])
+            
             // double to date
             realDay = Date(timeIntervalSince1970: dateInt)
             
             // Database.database().reference(withPath: self.txtRoom.text!) -> path to Room2 or Room3
             Database.database().reference(withPath: self.txtRoom.text!).child(String(format: "%.0f", dateInt) + txtRoom.text!).observeSingleEvent(of: .value, with: { (snapshot) in
-                    if snapshot.exists() {
-                        print(self.txtRoom.text! + " is not available at ", realDay!)
-                    } else {
-                        Database.database().reference(withPath: self.txtRoom.text!).child(String(format: "%.0f", dateInt) + self.txtRoom.text!).setValue(["available": false, "username": self.txtUsername.text!])
-                    }})
-            
-            
-            print(dateInt)
+                if snapshot.exists() {
+                    print(self.txtRoom.text! + " is not available at ", realDay!)
+                    //self.notavail.isHidden = false
+                    counter = bookh
+                    cantbook = true
+                    print("cantbook", cantbook)
+                } else if cantbook == false {
+                    print(cantbook)
+                    print("hægt að bókaaa")
+                }
+            })
             
             // add half an hour
             realDay = realDay?.addingTimeInterval(1800)
             
-            //let ddate = bdate?.addingTimeInterval(3600)
-            //print("bdate", bdate ?? "nil")
-            //let newdate = bdate?.addingTimeInterval(1800)
-            //print("newsate", newdate ?? "nil")
-           // print("ddate", ddate ?? "nil")
-           /* var com = DateComponents()
-            com.minute = 30
-            let date = bdate*/
             counter = counter + 1
+            print("counter", counter, "bookh", bookh)
         }
         
-//        ref.childByAutoId().setValue(["date": txtDate.text!, "room": txtRoom.text!, "username": txtUsername.text!, "duration": bookh])
-//
- 
-        /*do{
-            //LOADING
-            let results = try context.fetch(request)
-            if results.count > 0 {
-                for i in results as! [NSManagedObject]{
-                    print(i)
-                }
+        var counter2 = 0
+        // Book if the room is available
+        
+        print("tekka hvort þetta sé cantbook eða ekki", cantbook)
+        
+        if cantbook == true{
+            print("getumekkibókað")
+        } else if cantbook == false{
+            while counter2 < bookh{
+                
+                //                print(realDay2!)
+                // date to double
+                var dateInt = Double()
+                dateInt = realDay2!.timeIntervalSince1970
+                
+                // Add to Firebase
+                //            ref.childByAutoId().setValue(["date": dateInt, "room": txtRoom.text!, "username": txtUsername.text!, "duration": bookh])
+                
+                // double to date
+                realDay2 = Date(timeIntervalSince1970: dateInt)
+                
+                // Database.database().reference(withPath: self.txtRoom.text!) -> path to Room2 or Room3
+                Database.database().reference(withPath: self.txtRoom.text!).child(String(format: "%.0f", dateInt) + txtRoom.text!).observeSingleEvent(of: .value, with: { (snapshot) in
+                    if snapshot.exists() {
+                        print(self.txtRoom.text! + " is not available at ", realDay2!)
+                       // self.notavail.isHidden = false
+                        print("bóka ekki", cantbook)
+                    } else if cantbook == false{
+                       // self.notavail.isHidden = true
+                        print("bóóóóóóóókaaaaaa biiitch")
+                        Database.database().reference(withPath: self.txtRoom.text!).child(String(format: "%.0f", dateInt) + self.txtRoom.text!).setValue(["available": false, "username": self.txtUsername.text!])
+                    }})
+                //                print(dateInt)
+                
+                // add half an hour
+                realDay2 = realDay2?.addingTimeInterval(1800)
+                print("realday inni í seinni", realDay2!)
+                
+                counter2 = counter2 + 1
             }
-            //SAVING
-            try context.save()
-            print(newUser)
-            print("Object Saved.")
         }
-        catch {
-            //PROCESSING ERROR
-        }*/
+        
+        counter = 0
+        print("**************************************************")
+        //        ref.childByAutoId().setValue(["date": txtDate.text!, "room": txtRoom.text!, "username": txtUsername.text!, "duration": bookh])
     }
     
     
@@ -261,7 +281,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             
             month = 0
             year += 1
-
+            
             
             GetStartDateDayPosition()
             
@@ -362,7 +382,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             cell.isHidden = false
         }
         
-//the first cells that needs to be hidden (if needed) will be negative or zero so we can hide them
+        //the first cells that needs to be hidden (if needed) will be negative or zero so we can hide them
         switch Direction {
         case 0:
             cell.DateLabel.text = "\(indexPath.row + 1 - NumberOfEmptyBox)"
@@ -387,6 +407,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         return cell
     }
-
+    
 }
 

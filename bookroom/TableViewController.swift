@@ -15,11 +15,23 @@ class TableViewController: UITableViewController {
     
     private var timePicker: UIDatePicker?
     
+    private var todayPicker: UIDatePicker?
+    
     var pickedTime = Date()
     
     var times: [Date] = []
     
     var stringTimes: [String] = []
+    
+    var strTime: [String] = []
+    
+    var dagklukk: [String] = []
+    
+    var dagLok: [Date] = []
+    
+    var dateInt: [Double] = []
+    
+    var colorPicker: [(colorDates)] = []
     
     
     override func viewDidLoad() {
@@ -42,30 +54,69 @@ class TableViewController: UITableViewController {
         let minutes = cal.component(.minute, from: date)
         print("hours = \(hour):\(minutes)")*/
         
+        // ****************************************************
+        // fá daginn í dag
+        let dateidag = Date()
+        
+        // print("dagurinn í dag", dateidag)
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm"
+        let idag = formatter.string(from: dateidag)
+        let daguridag = idag.prefix(10)
+        
+        // print("bara dagur í dag", type(of: daguridag))
+        
+        // ****************************************************
+        
         timePicker = UIDatePicker()
         timePicker?.datePickerMode = .time
-        timePicker?.locale = NSLocale(localeIdentifier: "en_GB") as Locale
+        timePicker?.locale = NSLocale(localeIdentifier: "da_DK") as Locale
         timePicker?.minuteInterval = 30
         
         let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = DateFormatter.Style.none
         dateFormatter.dateFormat = "HH:mm"
         timePicker?.date = dateFormatter.date(from: "08:00")!
         pickedTime  = ((timePicker?.date)!)
-       
-    
-        for _ in 0...32{
+ 
+        // 08:00-23:30 as date
+        for _ in 0...31{
             times.append(pickedTime)
             pickedTime = pickedTime + 1800
         }
         
+        // 08:00-23:30 as string
+        for i in 0...31{
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "HH:mm"
+            strTime.append(dateFormatter.string(from: times[i]))
+        }
         
-        /*let cal = Calendar.current
-         let hour = cal.component(.hour, from: pickedTime)
-         let minutes = cal.component(.minute, from: pickedTime)
-         print("Hours:")
-         print(type(of: hour))
-         print(minutes + 30)*/
+        // todays date plus 08:00-23:30 as string
+        print("dagur og tími")
+        for i in 0...31{
+            dagklukk.append(daguridag + " " + strTime[i])
+            //print(dagklukk[i])
+        }
+        
+        for i in 0...31{
+            let dateForm = DateFormatter()
+            dateForm.dateFormat = "yyyy-MM-dd HH:mm"
+            let date = dateForm.date(from: dagklukk[i])
+            dagLok.append(date!.addingTimeInterval(3600))
+            //print(dagLok[i])
+        }
+        
+        print("ÞETTA ER ORÐIÐ AÐ DOUBLE")
+        var dagsetning = Double()
+        for i in 0...31{
+            dagsetning = dagLok[i].timeIntervalSince1970
+            dateInt.append(dagsetning)
+            print(dateInt[i])
+        }
+        
+        
+     
       //  txtDate.text = dateFormatter.string(from: datePicker.date)
         
     }
@@ -79,20 +130,42 @@ class TableViewController: UITableViewController {
      override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellID", for: indexPath)
         
-        //let times = self.times[indexPath.row]
+        let toDate = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd.MM.yyyy HH:mm"
+        let today = formatter.string(from: toDate)
+        let todayTime = today.suffix(5)
         
-        for i in 0...32{
-            print(times[i])
+        for i in 0...31{
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "HH:mm"
             stringTimes.append(dateFormatter.string(from: times[i]))
         }
         
-        let nameTime = self.stringTimes[indexPath.row]
         
-        cell.backgroundColor = UIColor.brown
+        for i in 0...31 {
+            if (stringTimes[i] < todayTime) {
+                colorPicker.append(colorDates(dateTime: stringTimes[i], uiColor: UIColor.lightGray))
+                // print(stringTimes[i])
+            }
+            else {
+                
+               colorPicker.append(colorDates(dateTime: stringTimes[i], uiColor: UIColor.green))
+            }
+        }
         
-        cell.textLabel?.text = nameTime
+        
+        //let times = self.times[indexPath.row]
+        
+        /*for i in 0...32{
+            print(times[i])
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "HH:mm"
+           // stringTimes.append(dateFormatter.string(from: times[i]))
+        }*/
+        
+        cell.textLabel?.text = colorPicker[indexPath.row].dateTime
+        cell.backgroundColor = colorPicker[indexPath.row].uiColor
         
      // Configure the cell...
         return cell
