@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseDatabase
 
 class TableViewController: UITableViewController {
     
@@ -15,6 +16,10 @@ class TableViewController: UITableViewController {
     private var timePicker: UIDatePicker?
     
     var pickedTime = Date()
+    
+    var times: [Date] = []
+    
+    var stringTimes: [String] = []
     
     
     override func viewDidLoad() {
@@ -45,16 +50,14 @@ class TableViewController: UITableViewController {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = DateFormatter.Style.none
         dateFormatter.dateFormat = "HH:mm"
-        timePicker?.date = dateFormatter.date(from: "09:00")!
+        timePicker?.date = dateFormatter.date(from: "08:00")!
         pickedTime  = ((timePicker?.date)!)
        
-        var times = [pickedTime]
-        
-        for _ in 1...32{
-            pickedTime = pickedTime + 1800
+    
+        for _ in 0...32{
             times.append(pickedTime)
+            pickedTime = pickedTime + 1800
         }
-        print(times)
         
         
         /*let cal = Calendar.current
@@ -70,14 +73,27 @@ class TableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
      // #warning Incomplete implementation, return the number of rows
         //let len = (24-8)*2
-        return 10
+        return times.count
      }
     
      override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellID", for: indexPath)
         
-        cell.textLabel?.text = "Something"
-     
+        //let times = self.times[indexPath.row]
+        
+        for i in 0...32{
+            print(times[i])
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "HH:mm"
+            stringTimes.append(dateFormatter.string(from: times[i]))
+        }
+        
+        let nameTime = self.stringTimes[indexPath.row]
+        
+        cell.backgroundColor = UIColor.brown
+        
+        cell.textLabel?.text = nameTime
+        
      // Configure the cell...
         return cell
      }
