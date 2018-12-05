@@ -30,7 +30,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         hours.text = String(sender.value)
     }
     private var datePicker: UIDatePicker?
-    private var fromDatePicker: UIDatePicker?
     
     let Months = ["January","February","March","April","May","June","July","August","September","October","November","December"]
     
