@@ -33,7 +33,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     @IBOutlet weak var notavail: UILabel!
     
     private var datePicker: UIDatePicker?
-    private var fromDatePicker: UIDatePicker?
+    private var timePicker: UIDatePicker?
+    private var todayPicker: UIDatePicker?
+    
     
     let Months = ["January","February","March","April","May","June","July","August","September","October","November","December"]
     
@@ -58,6 +60,24 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     var dayCounter = 0
     
     var pickedDate = Date()
+    
+    var avaToday: [String] = []
+    
+    var times: [Date] = []
+    
+    var goodTimes: [String] = []
+    
+    var strTime: [String] = []
+    
+    var dagklukk: [String] = []
+    
+    var dagLok: [Date] = []
+    
+    var dateInt: [Double] = []
+    
+    var pickedTime = Date()
+    
+    var bookedDatesInt: [(datesInt)] = []
     
     
     
@@ -108,8 +128,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        notavail.isHidden = true
-        
+      
         //        let ref = Database.database().reference()
         
         //        ref.child("booker/username").setValue("hallo")
@@ -136,7 +155,73 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         txtDate.inputView = datePicker
         view.addGestureRecognizer(tapGesture)
         
+        notavail.isHidden = true
+        timePicker = UIDatePicker()
+        timePicker?.datePickerMode = .time
+        timePicker?.locale = NSLocale(localeIdentifier: "da_DK") as Locale
+        timePicker?.minuteInterval = 30
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH:mm"
+        timePicker?.date = dateFormatter.date(from: "08:00")!
+        pickedTime  = ((timePicker?.date)!)
+        
+        // 08:00-23:30 as date
+        for _ in 0...31{
+            times.append(pickedTime)
+            pickedTime = pickedTime + 1800
+        }
+        
+        let toDate = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM/yyyy HH:mm"
+        let today = formatter.string(from: toDate)
+        let daguridag = today.prefix(10)
+        
+        // 08:00-23:30 as string
+        for i in 0...31{
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "HH:mm"
+            strTime.append(dateFormatter.string(from: times[i]))
+        }
+        
+        // todays date plus 08:00-23:30 as string
+        //print("dagur og tími")
+        for i in 0...31{
+            dagklukk.append(daguridag + " " + strTime[i])
+        }
+        
+        for i in 0...31{
+            let dateForm = DateFormatter()
+            dateForm.dateFormat = "dd/MM/yyyy HH:mm"
+            let date = dateForm.date(from: dagklukk[i])
+            dagLok.append(date!.addingTimeInterval(3600))
+        }
+        
+        let myGroup = DispatchGroup()
+        var counter = 0;
+        //print("ÞETTA ER ORÐIÐ AÐ DOUBLE")
+        var dagsetning = Double()
+        for i in 0...31{
+            myGroup.enter()
+            dagsetning = dagLok[i].timeIntervalSince1970
+            dateInt.append(dagsetning)
+            Database.database().reference(withPath: "Room 3").child(String(format: "%.0f", dagsetning)).observeSingleEvent(of: .value, with: { (snapshot) in
+                if snapshot.exists() {
+                    print("loob not ")
+                    self.bookedDatesInt.append(datesInt(dateInt: self.dateInt[i], available: false))
+                    counter = counter + 1
+                    print(counter)
+                    myGroup.leave()
+                }
+            })
+        }
     }
+    
+  
+    
+    
+    
     
     @objc func viewTapped(gestureRecognizer:UITapGestureRecognizer){
         view.endEditing(true)
@@ -254,6 +339,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                         print(self.txtRoom.text! + " is not available at ", realDay2!)
                         self.notavail.isHidden = false
                         print("bóka ekki", cantbook)
+                        self.avaToday.append("Bokað")
                     } else if cantbook == false{
                         self.notavail.isHidden = true
                         print("bóóóóóóóókaaaaaa biiitch")
@@ -376,8 +462,13 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "calend", for: indexPath) as! DateCollectionViewCell
-        
-        cell.backgroundColor = UIColor.cyan
+    
+        if (indexPath.row + 1 - NumberOfEmptyBox > day){
+            cell.backgroundColor = UIColor.green
+        }
+        else {
+            cell.backgroundColor = UIColor.lightGray
+        }
         
         if cell.isHidden{
             cell.isHidden = false
@@ -400,6 +491,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             cell.isHidden = true
         }
         
+     
         if currentMonth == Months[calender.component(.month, from: date) - 1] && year == calender.component(.year, from: date) && indexPath.row + 1 - NumberOfEmptyBox == day{
             cell.backgroundColor = UIColor.red
             // cell.Circle.isHidden = false
