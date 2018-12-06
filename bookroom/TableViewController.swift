@@ -36,7 +36,8 @@ class TableViewController: UITableViewController {
     var dagLok: [Date] = []
     
     var dateInt: [Double] = []
-    
+    var array: [Double] = []
+ 
     var colorPicker: [(colorDates)] = []
     
     var co = 0
@@ -44,7 +45,7 @@ class TableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
         
         // ****************************************************
@@ -85,6 +86,18 @@ class TableViewController: UITableViewController {
       //  txtDate.text = dateFormatter.string(from: datePicker.date)
         
     }
+    
+    /*private func loadData(array: [Double]) {
+        for i in 0...31 {
+            Database.database().reference(withPath: "Room 3").child(String(format: "%.0f", dateInt[i])).observeSingleEvent(of: .value, with: { (snapshot) in
+                if snapshot.exists() {
+                    self.goodTimes.append(self.strTime[i])
+                    print("loob not ")
+                }
+            })
+        }
+        
+    }*/
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
      // #warning Incomplete implementation, return the number of rows
@@ -128,51 +141,32 @@ class TableViewController: UITableViewController {
         for i in 0...31{
             dagsetning = dagLok[i].timeIntervalSince1970
             dateInt.append(dagsetning)
-            // print(dateInt[i])
         }
-        /* print("cocococococococo", co)
-         
-         if (strTime[co] > todayTime) {
-         print("HÆÆÆÆÆÆÆÆÆÆÆ", strTime[co])
-         Database.database().reference(withPath: "Room 3").child(String(format: "%.0f", dateInt[co])).observeSingleEvent(of: .value, with: { (snapshot) in
-         if snapshot.exists() {
-         print(self.strTime[self.co])
-         print("loob not ")
-         self.colorPicker.append(colorDates(dateTime: self.strTime[self.co], uiColor: UIColor.red))
-         } else {
-         print(self.strTime[self.co])
-         // self.notavail.isHidden = true
-         print("loop avail bit")
-         self.colorPicker.append(colorDates(dateTime: self.strTime[self.co], uiColor: UIColor.green))
-         }})
-         }
-         
-         co = co + 1*/
+
         
-        
-        //let times = self.times[indexPath.row]
-        
-        /*for i in 0...32{
-         print(times[i])
-         let dateFormatter = DateFormatter()
-         dateFormatter.dateFormat = "HH:mm"
-         // stringTimes.append(dateFormatter.string(from: times[i]))
-         }*/
-        
+        for i in 0...31 {
+            if (strTime[i] > timiIDag) {
+                Database.database().reference(withPath: "Room 3").child(String(format: "%.0f", dateInt[co])).observeSingleEvent(of: .value, with: { (snapshot) in
+                    if snapshot.exists() {
+                        print(self.strTime[i])
+                        print("loob not ")
+                    } else {
+                        print("loop avail bit")
+                        print(self.strTime[i])
+                    }})
+            }
+        }
+
         
         if(today == Anyday){
-            print("HELLLO ")
             for i in 0...31 {
                 if (strTime[i] < timiIDag) {
                     colorPicker.append(colorDates(dateTime: strTime[i], uiColor: UIColor.lightGray))
                 }
                 else {
-                    colorPicker.append(colorDates(dateTime: strTime[i], uiColor: UIColor.green))
+                    self.colorPicker.append(colorDates(dateTime: self.strTime[i], uiColor: UIColor.green))
                 }
             }
-            cell.textLabel?.text = colorPicker[indexPath.row].dateTime
-            cell.backgroundColor = colorPicker[indexPath.row].uiColor
-            return cell
         }
         else {
             for i in 0...31 {
