@@ -79,7 +79,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     var bookedDatesInt: [(datesInt)] = []
     
-    
+    let pickerView = UIPickerView()
     
     
     /**************************************PICKER VIEW*************************************/
@@ -100,11 +100,12 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         txtRoom.text = roomTypes[row]
     }
     
-    let roomTypes = ["Room 2", "Room 3"]
+    let roomTypes = ["Room 1"]
     
     func createPickerView(){
-        let pickerView = UIPickerView()
+//        let pickerView = UIPickerView()
         pickerView.delegate = self
+    
         
         txtRoom.inputView = pickerView
     }
@@ -135,6 +136,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         createPickerView()
         dismissPickerView()
+        
+        // should make the first row in the pickerview be default
+        pickerView.selectRow(1, inComponent: 0, animated: true)
         
         currentMonth = Months[month]
         MonthLabel.text = "\(currentMonth) \(year)"
@@ -206,7 +210,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             myGroup.enter()
             dagsetning = dagLok[i].timeIntervalSince1970
             dateInt.append(dagsetning)
-            Database.database().reference(withPath: "Room 3").child(String(format: "%.0f", dagsetning)).observeSingleEvent(of: .value, with: { (snapshot) in
+            Database.database().reference(withPath: "Room 1").child(String(format: "%.0f", dagsetning)).observeSingleEvent(of: .value, with: { (snapshot) in
                 if snapshot.exists() {
                     print("loob not ")
                     self.bookedDatesInt.append(datesInt(dateInt: self.dateInt[i], available: false))
