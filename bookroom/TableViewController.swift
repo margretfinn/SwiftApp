@@ -12,6 +12,8 @@ import FirebaseDatabase
 class TableViewController: UITableViewController {
     
     let cellId = "cellID"
+        
+    @IBOutlet weak var navBar: UINavigationItem!
     
     private var timePicker: UIDatePicker?
     
@@ -21,7 +23,7 @@ class TableViewController: UITableViewController {
     
     var times: [Date] = []
     
-    var stringTimes: [String] = []
+    var goodTimes: [String] = []
     
     var strTime: [String] = []
     
@@ -32,6 +34,8 @@ class TableViewController: UITableViewController {
     var dateInt: [Double] = []
     
     var colorPicker: [(colorDates)] = []
+    
+    var co = 0
     
     
     override func viewDidLoad() {
@@ -61,9 +65,13 @@ class TableViewController: UITableViewController {
         // print("dagurinn í dag", dateidag)
         
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd HH:mm"
+        formatter.dateFormat = "dd/MM/yyyy HH:mm"
         let idag = formatter.string(from: dateidag)
         let daguridag = idag.prefix(10)
+        
+        let dagur = daguridag.prefix(5)
+        navBar.prompt = "\(dagur)"
+        
         
         // print("bara dagur í dag", type(of: daguridag))
         
@@ -93,7 +101,7 @@ class TableViewController: UITableViewController {
         }
         
         // todays date plus 08:00-23:30 as string
-        print("dagur og tími")
+        //print("dagur og tími")
         for i in 0...31{
             dagklukk.append(daguridag + " " + strTime[i])
             //print(dagklukk[i])
@@ -101,18 +109,18 @@ class TableViewController: UITableViewController {
         
         for i in 0...31{
             let dateForm = DateFormatter()
-            dateForm.dateFormat = "yyyy-MM-dd HH:mm"
+            dateForm.dateFormat = "dd/MM/yyyy HH:mm"
             let date = dateForm.date(from: dagklukk[i])
             dagLok.append(date!.addingTimeInterval(3600))
             //print(dagLok[i])
         }
         
-        print("ÞETTA ER ORÐIÐ AÐ DOUBLE")
+        //print("ÞETTA ER ORÐIÐ AÐ DOUBLE")
         var dagsetning = Double()
         for i in 0...31{
             dagsetning = dagLok[i].timeIntervalSince1970
             dateInt.append(dagsetning)
-            print(dateInt[i])
+           // print(dateInt[i])
         }
         
         
@@ -135,24 +143,39 @@ class TableViewController: UITableViewController {
         formatter.dateFormat = "dd.MM.yyyy HH:mm"
         let today = formatter.string(from: toDate)
         let todayTime = today.suffix(5)
-        
-        for i in 0...31{
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "HH:mm"
-            stringTimes.append(dateFormatter.string(from: times[i]))
-        }
-        
+        //print(todayTime)
         
         for i in 0...31 {
-            if (stringTimes[i] < todayTime) {
-                colorPicker.append(colorDates(dateTime: stringTimes[i], uiColor: UIColor.lightGray))
-                // print(stringTimes[i])
+            
+            if (strTime[i] < todayTime) {
+                colorPicker.append(colorDates(dateTime: strTime[i], uiColor: UIColor.lightGray))
+                //print(strTime[i])
+                //print(dagklukk[i])
             }
             else {
-                
-               colorPicker.append(colorDates(dateTime: stringTimes[i], uiColor: UIColor.green))
+                colorPicker.append(colorDates(dateTime: strTime[i], uiColor: UIColor.green))
             }
         }
+   
+        
+       /* print("cocococococococo", co)
+        
+        if (strTime[co] > todayTime) {
+            print("HÆÆÆÆÆÆÆÆÆÆÆ", strTime[co])
+            Database.database().reference(withPath: "Room 3").child(String(format: "%.0f", dateInt[co])).observeSingleEvent(of: .value, with: { (snapshot) in
+                if snapshot.exists() {
+                    print(self.strTime[self.co])
+                    print("loob not ")
+                    self.colorPicker.append(colorDates(dateTime: self.strTime[self.co], uiColor: UIColor.red))
+                } else {
+                    print(self.strTime[self.co])
+                    // self.notavail.isHidden = true
+                    print("loop avail bit")
+                    self.colorPicker.append(colorDates(dateTime: self.strTime[self.co], uiColor: UIColor.green))
+                }})
+        }
+        
+        co = co + 1*/
         
         
         //let times = self.times[indexPath.row]
@@ -172,6 +195,8 @@ class TableViewController: UITableViewController {
      }
     
 
+    @IBAction func nextDay(_ sender: Any) {
+    }
     
     
     

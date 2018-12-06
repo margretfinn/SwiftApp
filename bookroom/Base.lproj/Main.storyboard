@@ -424,6 +424,18 @@
                                             </connections>
                                         </button>
                                     </barButtonItem>
+                                    <barButtonItem key="rightBarButtonItem" style="plain" id="cV0-VJ-pZ4">
+                                        <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="OrJ-MW-XdV">
+                                            <rect key="frame" x="276" y="7" width="83" height="30"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <state key="normal" title="Next">
+                                                <color key="titleColor" red="0.58072251080000004" green="0.066734083" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </state>
+                                        </button>
+                                        <connections>
+                                            <action selector="nextDay:" destination="fa4-lZ-bUo" id="8Qc-m9-TJu"/>
+                                        </connections>
+                                    </barButtonItem>
                                 </navigationItem>
                             </items>
                         </navigationBar>
@@ -432,10 +444,13 @@
                             <outlet property="delegate" destination="fa4-lZ-bUo" id="UG2-JT-7ye"/>
                         </connections>
                     </tableView>
+                    <connections>
+                        <outlet property="navBar" destination="3L4-lb-xS8" id="YS9-YY-hNJ"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Iot-0y-E3g" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="575" y="97"/>
+            <point key="canvasLocation" x="573.60000000000002" y="96.7016491754123"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
