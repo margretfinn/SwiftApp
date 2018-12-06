@@ -11,4 +11,5 @@ import UIKit
 struct colorDates{
     let dateTime: String
     let uiColor : UIColor
+    let avail   : String
 }

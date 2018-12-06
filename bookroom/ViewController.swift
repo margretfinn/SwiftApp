@@ -13,6 +13,7 @@ import FirebaseDatabase
 import Foundation
 
 class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate  {
+  
     
     @IBOutlet weak var txtRoom: UITextField!
     
@@ -62,8 +63,14 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     var pickedDate = Date()
     
     var avaToday: [String] = []
-    
+
     var dateBaseArray = [AvDateBase]()
+    
+    var bookedDatesInt: [(datesInt)] = []
+    
+    let pickerView = UIPickerView()
+    
+    var cantbook = false
     
     var AvaCounter = 0
         
@@ -86,11 +93,12 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         txtRoom.text = roomTypes[row]
     }
     
-    let roomTypes = ["Room 2", "Room 3"]
+    let roomTypes = ["Room 1"]
     
     func createPickerView(){
-        let pickerView = UIPickerView()
+//        let pickerView = UIPickerView()
         pickerView.delegate = self
+    
         
         txtRoom.inputView = pickerView
     }
@@ -123,6 +131,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         createPickerView()
         dismissPickerView()
         
+        // should make the first row in the pickerview be default
+        pickerView.selectRow(1, inComponent: 0, animated: true)
+        
         currentMonth = Months[month]
         MonthLabel.text = "\(currentMonth) \(year)"
         if weekday == 0 {
@@ -144,9 +155,11 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         notavail.isHidden = true
         
+
         fetchUser()
      
     }
+    
     func fetchUser(){
         Database.database().reference().child("Room 3").observe(.childAdded, with: { (snapshot) in
             if let dictonary = snapshot.value as? [String: AnyObject] {
@@ -213,7 +226,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         var realDay = bday?.addingTimeInterval(3600)
         var realDay2 = realDay
         
-        var cantbook = false
         
         var counter = 0
         while counter < bookh {
@@ -235,10 +247,10 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                     print(self.txtRoom.text! + " is not available at ", realDay!)
                     self.notavail.isHidden = false
                     counter = bookh
-                    cantbook = true
-                    print("cantbook", cantbook)
-                } else if cantbook == false {
-                    print(cantbook)
+                    self.cantbook = true
+                    print("cantbook", self.cantbook)
+                } else if self.cantbook == false {
+                    print(self.cantbook)
                     print("hægt að bókaaa")
                 }
             })
@@ -277,9 +289,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                     if snapshot.exists() {
                         print(self.txtRoom.text! + " is not available at ", realDay2!)
                         self.notavail.isHidden = false
-                        print("bóka ekki", cantbook)
+                        print("bóka ekki", self.cantbook)
                         self.avaToday.append("Bokað")
-                    } else if cantbook == false{
+                    } else if self.cantbook == false{
                         self.notavail.isHidden = true
                         print("bóóóóóóóókaaaaaa biiitch")
                         Database.database().reference(withPath: self.txtRoom.text!).child(String(format: "%.0f", dateInt)).setValue(["available": false, "username": self.txtUsername.text!])
@@ -411,6 +423,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         if cell.isHidden{
             cell.isHidden = false
         }
+        
         
         //the first cells that needs to be hidden (if needed) will be negative or zero so we can hide them
         switch Direction {
