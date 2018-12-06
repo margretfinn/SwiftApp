@@ -81,6 +81,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     let pickerView = UIPickerView()
     
+    var cantbook = false
+    
     
     /**************************************PICKER VIEW*************************************/
     
@@ -278,7 +280,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         var realDay = bday?.addingTimeInterval(3600)
         var realDay2 = realDay
         
-        var cantbook = false
         
         var counter = 0
         while counter < bookh {
@@ -300,10 +301,10 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                     print(self.txtRoom.text! + " is not available at ", realDay!)
                     self.notavail.isHidden = false
                     counter = bookh
-                    cantbook = true
-                    print("cantbook", cantbook)
-                } else if cantbook == false {
-                    print(cantbook)
+                    self.cantbook = true
+                    print("cantbook", self.cantbook)
+                } else if self.cantbook == false {
+                    print(self.cantbook)
                     print("hægt að bókaaa")
                 }
             })
@@ -342,9 +343,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                     if snapshot.exists() {
                         print(self.txtRoom.text! + " is not available at ", realDay2!)
                         self.notavail.isHidden = false
-                        print("bóka ekki", cantbook)
+                        print("bóka ekki", self.cantbook)
                         self.avaToday.append("Bokað")
-                    } else if cantbook == false{
+                    } else if self.cantbook == false{
                         self.notavail.isHidden = true
                         print("bóóóóóóóókaaaaaa biiitch")
                         Database.database().reference(withPath: self.txtRoom.text!).child(String(format: "%.0f", dateInt)).setValue(["available": false, "username": self.txtUsername.text!])
@@ -477,6 +478,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         if cell.isHidden{
             cell.isHidden = false
         }
+        
         
         //the first cells that needs to be hidden (if needed) will be negative or zero so we can hide them
         switch Direction {

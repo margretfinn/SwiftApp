@@ -40,7 +40,9 @@ class TableViewController: UITableViewController {
  
     var colorPicker: [(colorDates)] = []
     
-    var co = 0
+//    var co = 0
+    
+    var availab = "available"
     
     
     override func viewDidLoad() {
@@ -143,51 +145,69 @@ class TableViewController: UITableViewController {
             dateInt.append(dagsetning)
         }
         
-       /* for i in 0...31 {
-            if (strTime[i] > timiIDag) {
-                Database.database().reference(withPath: "Room 3").child(String(format: "%.0f", dateInt[co])).observeSingleEvent(of: .value, with: { (snapshot) in
-                    if snapshot.exists() {
-                        print(self.strTime[i])
-                        print("loob not ")
-                    } else {
-                        print("loop avail bit")
-                        print(self.strTime[i])
-                    }})
-            }
+//        for i in 0...31 {
+//            if (strTime[i] > timiIDag) {
+//                Database.database().reference(withPath: "Room 1").child(String(format: "%.0f", dateInt[indexPath.row])).observeSingleEvent(of: .value, with: { (snapshot) in
+//                    if snapshot.exists() {
+//                        print(self.strTime[i])
+//                        print("loob not ")
+//                        self.availab = "booked"
+//                    } else {
+//                        print("loop avail bit")
+//                        print(self.strTime[i])
+//                    }})
+//            }
+//        }
+        
+        if (strTime[indexPath.row] > timiIDag) {
+            Database.database().reference(withPath: "Room 1").child(String(format: "%.0f", dateInt[indexPath.row])).observeSingleEvent(of: .value, with: { (snapshot) in
+                if snapshot.exists() {
+                    print(self.strTime[indexPath.row])
+                    print("loob not ")
+                    self.availab = "booked"
+                } else {
+                    print("loop avail bit")
+                    print(self.strTime[indexPath.row])
+                }})
         }
         
-        for i in 0...31 {
-            if (strTime[i] > timiIDag) {
-                Database.database().reference(withPath: "Room 3").child(String(format: "%.0f", dateInt[co])).observeSingleEvent(of: .value, with: { (snapshot) in
-                    if snapshot.exists() {
-                        print(self.strTime[i])
-                        print("loob not ")
-                    } else {
-                        print("loop avail bit")
-                        print(self.strTime[i])
-                    }})
-            }
-        }*/
+//        if(today == Anyday){
+//            for i in 0...31 {
+//                if (strTime[i] < timiIDag) {
+//                    colorPicker.append(colorDates(dateTime: strTime[i], uiColor: UIColor.lightGray, avail: availab))
+//                } else if cell.detailTextLabel?.text! != nil && cell.detailTextLabel!.text! == "booked"{
+//                    print("hæææ bitch þú er heimsk")
+//                    colorPicker.append(colorDates(dateTime: strTime[i], uiColor: UIColor.red, avail: availab))
+//                }
+//                else {
+//                    self.colorPicker.append(colorDates(dateTime: self.strTime[i], uiColor: UIColor.green, avail: availab))
+//                }
+//            }
+//        }
+//        else {
+//            for i in 0...31 {
+//                colorPicker.append(colorDates(dateTime: strTime[i], uiColor: UIColor.green, avail: availab))
+//            }
+//        }
 
-        
         if(today == Anyday){
-            for i in 0...31 {
-                if (strTime[i] < timiIDag) {
-                    colorPicker.append(colorDates(dateTime: strTime[i], uiColor: UIColor.lightGray))
-                }
-                else {
-                    self.colorPicker.append(colorDates(dateTime: self.strTime[i], uiColor: UIColor.green))
-                }
+            if (strTime[indexPath.row] < timiIDag) {
+                colorPicker.append(colorDates(dateTime: strTime[indexPath.row], uiColor: UIColor.lightGray, avail: availab))
+            } else if cell.detailTextLabel?.text! != nil && cell.detailTextLabel!.text! == "booked"{
+                print("hæææ bitch þú er heimsk")
+                colorPicker.append(colorDates(dateTime: strTime[indexPath.row], uiColor: UIColor.red, avail: availab))
+            }
+            else {
+                self.colorPicker.append(colorDates(dateTime: self.strTime[indexPath.row], uiColor: UIColor.green, avail: availab))
             }
         }
         else {
-            for i in 0...31 {
-                colorPicker.append(colorDates(dateTime: strTime[i], uiColor: UIColor.green))
-            }
+            colorPicker.append(colorDates(dateTime: strTime[indexPath.row], uiColor: UIColor.green, avail: availab))
         }
         
         cell.textLabel?.text = colorPicker[indexPath.row].dateTime
         cell.backgroundColor = colorPicker[indexPath.row].uiColor
+//        cell.detailTextLabel?.text = colorPicker[indexPath.row].avail
         return cell
      }
     
