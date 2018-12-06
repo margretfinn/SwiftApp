@@ -206,7 +206,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             realDay = Date(timeIntervalSince1970: dateInt)
             
             // Database.database().reference(withPath: self.txtRoom.text!) -> path to Room2 or Room3
-            Database.database().reference(withPath: self.txtRoom.text!).child(String(format: "%.0f", dateInt) + txtRoom.text!).observeSingleEvent(of: .value, with: { (snapshot) in
+            Database.database().reference(withPath: self.txtRoom.text!).child(String(format: "%.0f", dateInt)).observeSingleEvent(of: .value, with: { (snapshot) in
                 if snapshot.exists() {
                     print(self.txtRoom.text! + " is not available at ", realDay!)
                     //self.notavail.isHidden = false
@@ -248,7 +248,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                 realDay2 = Date(timeIntervalSince1970: dateInt)
                 
                 // Database.database().reference(withPath: self.txtRoom.text!) -> path to Room2 or Room3
-                Database.database().reference(withPath: self.txtRoom.text!).child(String(format: "%.0f", dateInt) + txtRoom.text!).observeSingleEvent(of: .value, with: { (snapshot) in
+                Database.database().reference(withPath: self.txtRoom.text!).child(String(format: "%.0f", dateInt)).observeSingleEvent(of: .value, with: { (snapshot) in
                     if snapshot.exists() {
                         print(self.txtRoom.text! + " is not available at ", realDay2!)
                        // self.notavail.isHidden = false
@@ -256,7 +256,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                     } else if cantbook == false{
                        // self.notavail.isHidden = true
                         print("bóóóóóóóókaaaaaa biiitch")
-                        Database.database().reference(withPath: self.txtRoom.text!).child(String(format: "%.0f", dateInt) + self.txtRoom.text!).setValue(["available": false, "username": self.txtUsername.text!])
+                        Database.database().reference(withPath: self.txtRoom.text!).child(String(format: "%.0f", dateInt)).setValue(["available": false, "username": self.txtUsername.text!])
                     }})
                 //                print(dateInt)
                 
