@@ -63,24 +63,10 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     var avaToday: [String] = []
     
-    var times: [Date] = []
+    var dateBaseArray = [AvDateBase]()
     
-    var goodTimes: [String] = []
-    
-    var strTime: [String] = []
-    
-    var dagklukk: [String] = []
-    
-    var dagLok: [Date] = []
-    
-    var dateInt: [Double] = []
-    
-    var pickedTime = Date()
-    
-    var bookedDatesInt: [(datesInt)] = []
-    
-    
-    
+    var AvaCounter = 0
+        
     
     /**************************************PICKER VIEW*************************************/
     
@@ -126,6 +112,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     /**************************************PICKER VIEW*************************************/
     
     
+  
     override func viewDidLoad() {
         super.viewDidLoad()
       
@@ -156,72 +143,24 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         view.addGestureRecognizer(tapGesture)
         
         notavail.isHidden = true
-        timePicker = UIDatePicker()
-        timePicker?.datePickerMode = .time
-        timePicker?.locale = NSLocale(localeIdentifier: "da_DK") as Locale
-        timePicker?.minuteInterval = 30
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "HH:mm"
-        timePicker?.date = dateFormatter.date(from: "08:00")!
-        pickedTime  = ((timePicker?.date)!)
-        
-        // 08:00-23:30 as date
-        for _ in 0...31{
-            times.append(pickedTime)
-            pickedTime = pickedTime + 1800
-        }
-        
-        let toDate = Date()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd/MM/yyyy HH:mm"
-        let today = formatter.string(from: toDate)
-        let daguridag = today.prefix(10)
-        
-        // 08:00-23:30 as string
-        for i in 0...31{
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "HH:mm"
-            strTime.append(dateFormatter.string(from: times[i]))
-        }
-        
-        // todays date plus 08:00-23:30 as string
-        //print("dagur og tími")
-        for i in 0...31{
-            dagklukk.append(daguridag + " " + strTime[i])
-        }
-        
-        for i in 0...31{
-            let dateForm = DateFormatter()
-            dateForm.dateFormat = "dd/MM/yyyy HH:mm"
-            let date = dateForm.date(from: dagklukk[i])
-            dagLok.append(date!.addingTimeInterval(3600))
-        }
-        
-        let myGroup = DispatchGroup()
-        var counter = 0;
-        //print("ÞETTA ER ORÐIÐ AÐ DOUBLE")
-        var dagsetning = Double()
-        for i in 0...31{
-            myGroup.enter()
-            dagsetning = dagLok[i].timeIntervalSince1970
-            dateInt.append(dagsetning)
-            Database.database().reference(withPath: "Room 3").child(String(format: "%.0f", dagsetning)).observeSingleEvent(of: .value, with: { (snapshot) in
-                if snapshot.exists() {
-                    print("loob not ")
-                    self.bookedDatesInt.append(datesInt(dateInt: self.dateInt[i], available: false))
-                    counter = counter + 1
-                    print(counter)
-                    myGroup.leave()
-                }
-            })
-        }
+        fetchUser()
+     
     }
-    
-  
-    
-    
-    
+    func fetchUser(){
+        Database.database().reference().child("Room 3").observe(.childAdded, with: { (snapshot) in
+            if let dictonary = snapshot.value as? [String: AnyObject] {
+                let user = AvDateBase()
+                user.userNameBase = dictonary["username"] as? String
+                user.availabilityBase = dictonary["available"] as? Bool
+                print(user.userNameBase ?? "nil",user.availabilityBase ?? false)
+                self.dateBaseArray.append(user)
+                DispatchQueue.main.async {
+                    print(self.dateBaseArray.count)
+                }
+            }
+        }, withCancel: nil)
+    }
     
     @objc func viewTapped(gestureRecognizer:UITapGestureRecognizer){
         view.endEditing(true)
@@ -462,12 +401,11 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "calend", for: indexPath) as! DateCollectionViewCell
-    
-        if (indexPath.row + 1 - NumberOfEmptyBox > day){
-            cell.backgroundColor = UIColor.green
-        }
-        else {
+        
+        if ((indexPath.row + 1 - NumberOfEmptyBox < day && currentMonth == Months[calender.component(.month, from: date) - 1])){
             cell.backgroundColor = UIColor.lightGray
+        }else{
+            cell.backgroundColor = UIColor.green
         }
         
         if cell.isHidden{
@@ -491,7 +429,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             cell.isHidden = true
         }
         
-     
         if currentMonth == Months[calender.component(.month, from: date) - 1] && year == calender.component(.year, from: date) && indexPath.row + 1 - NumberOfEmptyBox == day{
             cell.backgroundColor = UIColor.red
             // cell.Circle.isHidden = false
