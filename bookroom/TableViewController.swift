@@ -11,6 +11,8 @@ import FirebaseDatabase
 
 class TableViewController: UITableViewController {
     
+    @IBOutlet weak var tableTable: UITableView!
+    
     let cellId = "cellID"
         
     @IBOutlet weak var navBar: UINavigationItem!
@@ -20,6 +22,8 @@ class TableViewController: UITableViewController {
     private var todayPicker: UIDatePicker?
     
     var pickedTime = Date()
+    var nextDayTime = Date()
+    var todayTime = Date()
     
     var times: [Date] = []
     
@@ -43,34 +47,19 @@ class TableViewController: UITableViewController {
 
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
         
-        
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
-        /*let date = Date()
-        let cal = Calendar.current
-        
-      //  let timeComp = cal.dateComponents([.hour:.minute], from: Date())
-        
-        let hour = cal.component(.hour, from: date )
-        let minutes = cal.component(.minute, from: date)
-        print("hours = \(hour):\(minutes)")*/
-        
         // ****************************************************
         // fá daginn í dag
-        let dateidag = Date()
+      //  let dateidag = Date()
         
         // print("dagurinn í dag", dateidag)
-        
+      
         let formatter = DateFormatter()
         formatter.dateFormat = "dd/MM/yyyy HH:mm"
-        let idag = formatter.string(from: dateidag)
+        let idag = formatter.string(from: nextDayTime)
         let daguridag = idag.prefix(10)
         
         let dagur = daguridag.prefix(5)
-        navBar.prompt = "\(dagur)"
+        navBar.title = "\(dagur)"
         
         
         // print("bara dagur í dag", type(of: daguridag))
@@ -92,39 +81,7 @@ class TableViewController: UITableViewController {
             times.append(pickedTime)
             pickedTime = pickedTime + 1800
         }
-        
-        // 08:00-23:30 as string
-        for i in 0...31{
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "HH:mm"
-            strTime.append(dateFormatter.string(from: times[i]))
-        }
-        
-        // todays date plus 08:00-23:30 as string
-        //print("dagur og tími")
-        for i in 0...31{
-            dagklukk.append(daguridag + " " + strTime[i])
-            //print(dagklukk[i])
-        }
-        
-        for i in 0...31{
-            let dateForm = DateFormatter()
-            dateForm.dateFormat = "dd/MM/yyyy HH:mm"
-            let date = dateForm.date(from: dagklukk[i])
-            dagLok.append(date!.addingTimeInterval(3600))
-            //print(dagLok[i])
-        }
-        
-        //print("ÞETTA ER ORÐIÐ AÐ DOUBLE")
-        var dagsetning = Double()
-        for i in 0...31{
-            dagsetning = dagLok[i].timeIntervalSince1970
-            dateInt.append(dagsetning)
-           // print(dateInt[i])
-        }
-        
-        
-     
+  
       //  txtDate.text = dateFormatter.string(from: datePicker.date)
         
     }
@@ -138,62 +95,118 @@ class TableViewController: UITableViewController {
      override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellID", for: indexPath)
         
-        var breytalit = false
-        
         let toDate = Date()
         let formatter = DateFormatter()
-        formatter.dateFormat = "dd.MM.yyyy HH:mm"
+        formatter.dateFormat = "dd/MM/yyyy HH:mm"
         let today = formatter.string(from: toDate)
-        let todayTime = today.suffix(5)
-        //print(todayTime)
+        let Anyday = formatter.string(from: nextDayTime)
+        let daguridag = today.prefix(10)
+        let timiIDag = today.suffix(5)
+     
+        // 08:00-23:30 as string
+        for i in 0...31{
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "HH:mm"
+            strTime.append(dateFormatter.string(from: times[i]))
+        }
+        
+        // todays date plus 08:00-23:30 as string
+        //print("dagur og tími")
+        for i in 0...31{
+            dagklukk.append(daguridag + " " + strTime[i])
+        }
+        
+        for i in 0...31{
+            let dateForm = DateFormatter()
+            dateForm.dateFormat = "dd/MM/yyyy HH:mm"
+            let date = dateForm.date(from: dagklukk[i])
+            dagLok.append(date!.addingTimeInterval(3600))
+        }
+        
+        //print("ÞETTA ER ORÐIÐ AÐ DOUBLE")
+        var dagsetning = Double()
+        for i in 0...31{
+            dagsetning = dagLok[i].timeIntervalSince1970
+            dateInt.append(dagsetning)
+        }
         
         for i in 0...31 {
-            
-            if (strTime[i] < todayTime) {
-                colorPicker.append(colorDates(dateTime: strTime[i], uiColor: UIColor.lightGray))
-                //print(strTime[i])
-                //print(dagklukk[i])
-            }
-            else {
-                colorPicker.append(colorDates(dateTime: strTime[i], uiColor: UIColor.green))
-                Database.database().reference(withPath: "Room 3").child(String(format: "%.0f", dateInt[i])).observeSingleEvent(of: .value, with: { (snapshot) in
+            if (strTime[i] > timiIDag) {
+                Database.database().reference(withPath: "Room 3").child(String(format: "%.0f", dateInt[co])).observeSingleEvent(of: .value, with: { (snapshot) in
                     if snapshot.exists() {
+                        print(self.strTime[i])
                         print("loob not ")
-                        breytalit = true
-                        //                  self.colorPicker.append(colorDates(dateTime: self.strTime[self.co], uiColor: UIColor.red))
                     } else {
-                        // self.notavail.isHidden = true
                         print("loop avail bit")
-                        //                    self.colorPicker.append(colorDates(dateTime: self.strTime[self.co], uiColor: UIColor.green))
+                        print(self.strTime[i])
                     }})
-                if breytalit == true{
-                    print("breyta lit biiiiiitch", breytalit)
-                    self.colorPicker.append(colorDates(dateTime: strTime[i], uiColor: UIColor.red))
-                }
             }
         }
         
-        co = co + 1
         
-        
-        //let times = self.times[indexPath.row]
-        
-        /*for i in 0...32{
-            print(times[i])
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "HH:mm"
-           // stringTimes.append(dateFormatter.string(from: times[i]))
-        }*/
+        if(today == Anyday){
+            for i in 0...31 {
+                if (strTime[i] < timiIDag) {
+                    colorPicker.append(colorDates(dateTime: strTime[i], uiColor: UIColor.lightGray))
+                }
+                else {
+                    colorPicker.append(colorDates(dateTime: strTime[i], uiColor: UIColor.green))
+                }
+            }
+            cell.textLabel?.text = colorPicker[indexPath.row].dateTime
+            cell.backgroundColor = colorPicker[indexPath.row].uiColor
+            return cell
+        }
+        else {
+            for i in 0...31 {
+                colorPicker.append(colorDates(dateTime: strTime[i], uiColor: UIColor.green))
+            }
+        }
         
         cell.textLabel?.text = colorPicker[indexPath.row].dateTime
         cell.backgroundColor = colorPicker[indexPath.row].uiColor
-        
-     // Configure the cell...
         return cell
      }
     
+    @IBAction func nextDay(_ sender: UIBarButtonItem) {
+        // fá daginn í dag
+        // print("dagurinn í dag", dateidag)
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM/yyyy HH:mm"
+        nextDayTime  = nextDayTime.addingTimeInterval(86400)
+        let idag = formatter.string(from: nextDayTime)
+        let daguridag = idag.prefix(10)
+        let dagur = daguridag.prefix(5)
+        navBar.title = "\(dagur)"
+        colorPicker.removeAll()
+        tableView.reloadData()
+        tableTable.reloadData()
+    }
+    
 
-    @IBAction func nextDay(_ sender: Any) {
+    @IBAction func LastDay(_ sender: UIBarButtonItem) {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM/yyyy HH:mm"
+        if(nextDayTime <= todayTime){
+            let idag = formatter.string(from: todayTime)
+            let daguridag = idag.prefix(10)
+            let dagur = daguridag.prefix(5)
+            navBar.title = "\(dagur)"
+            colorPicker.removeAll()
+            tableView.reloadData()
+            tableTable.reloadData()
+        }
+        else {
+            nextDayTime = nextDayTime.addingTimeInterval(-86400)
+            let idag = formatter.string(from: nextDayTime)
+            let daguridag = idag.prefix(10)
+            let dagur = daguridag.prefix(5)
+            navBar.title = "\(dagur)"
+            colorPicker.removeAll()
+            tableView.reloadData()
+            tableTable.reloadData()
+        }
     }
     
     
