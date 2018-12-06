@@ -221,6 +221,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             
             // add half an hour
             realDay = realDay?.addingTimeInterval(1800)
+            print(realDay!)
             
             counter = counter + 1
             print("counter", counter, "bookh", bookh)
