@@ -11,6 +11,8 @@ import FirebaseDatabase
 
 class TableViewController: UITableViewController {
     
+    @IBOutlet weak var tableTable: UITableView!
+    
     let cellId = "cellID"
         
     @IBOutlet weak var navBar: UINavigationItem!
@@ -20,6 +22,8 @@ class TableViewController: UITableViewController {
     private var todayPicker: UIDatePicker?
     
     var pickedTime = Date()
+    var nextDayTime = Date()
+    var todayTime = Date()
     
     var times: [Date] = []
     
@@ -70,7 +74,7 @@ class TableViewController: UITableViewController {
         let daguridag = idag.prefix(10)
         
         let dagur = daguridag.prefix(5)
-        navBar.prompt = "\(dagur)"
+        navBar.title = "\(dagur)"
         
         
         // print("bara dagur í dag", type(of: daguridag))
@@ -194,8 +198,43 @@ class TableViewController: UITableViewController {
         return cell
      }
     
+    @IBAction func nextDay(_ sender: UIBarButtonItem) {
+        // fá daginn í dag
+        // print("dagurinn í dag", dateidag)
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM/yyyy HH:mm"
+        nextDayTime  = nextDayTime.addingTimeInterval(86400)
+        let idag = formatter.string(from: nextDayTime)
+        let daguridag = idag.prefix(10)
+        
+        let dagur = daguridag.prefix(5)
+        print(dagur)
+        navBar.title = "\(dagur)"
+        print("Next day")
+        navBar.title = "\(dagur)"
+        tableTable.reloadData()
+    }
+    
 
-    @IBAction func nextDay(_ sender: Any) {
+    @IBAction func LastDay(_ sender: UIBarButtonItem) {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM/yyyy HH:mm"
+        if(nextDayTime <= todayTime){
+            let idag = formatter.string(from: todayTime)
+            let daguridag = idag.prefix(10)
+            let dagur = daguridag.prefix(5)
+            navBar.title = "\(dagur)"
+            tableTable.reloadData()
+        }
+        else {
+            nextDayTime = nextDayTime.addingTimeInterval(-86400)
+            let idag = formatter.string(from: nextDayTime)
+            let daguridag = idag.prefix(10)
+            let dagur = daguridag.prefix(5)
+            navBar.title = "\(dagur)"
+            tableTable.reloadData()
+        }
     }
     
     

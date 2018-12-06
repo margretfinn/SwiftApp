@@ -7,6 +7,7 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -377,28 +378,6 @@
             </objects>
             <point key="canvasLocation" x="354" y="-999"/>
         </scene>
-        <!--List View Controller-->
-        <scene sceneID="QfJ-vV-eDA">
-            <objects>
-                <viewController id="LGm-4d-bEB" customClass="ListViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="2pf-Ge-bMS">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="ahD-ot-3ks">
-                                <rect key="frame" x="30" y="28" width="315" height="639"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </tableView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <viewLayoutGuide key="safeArea" id="Cnz-9x-yEA"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="FR7-e5-ISW" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1919" y="98"/>
-        </scene>
         <!--Table View Controller-->
         <scene sceneID="Jtk-Nh-YsS">
             <objects>
@@ -410,30 +389,36 @@
                         <navigationBar key="tableHeaderView" contentMode="scaleToFill" id="Eg8-sa-L62">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <color key="barTintColor" red="0.58072251080000004" green="0.066734083" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <textAttributes key="titleTextAttributes">
+                                <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </textAttributes>
                             <items>
                                 <navigationItem title="Availability" id="3L4-lb-xS8">
-                                    <barButtonItem key="leftBarButtonItem" style="plain" id="X5O-2m-9jf">
-                                        <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="i4l-ye-et3">
-                                            <rect key="frame" x="16" y="7" width="83" height="30"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <state key="normal" title="Back">
-                                                <color key="titleColor" red="0.58072251080000004" green="0.066734083" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            </state>
+                                    <leftBarButtonItems>
+                                        <barButtonItem style="plain" id="X5O-2m-9jf">
+                                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="i4l-ye-et3">
+                                                <rect key="frame" x="16" y="7" width="83" height="30"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <state key="normal" title="Book">
+                                                    <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                </state>
+                                                <connections>
+                                                    <segue destination="BYZ-38-t0r" kind="show" id="jgF-t2-7Y5"/>
+                                                </connections>
+                                            </button>
+                                        </barButtonItem>
+                                        <barButtonItem title="Last day" id="WoJ-NU-cTV">
+                                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <connections>
-                                                <segue destination="BYZ-38-t0r" kind="show" id="jgF-t2-7Y5"/>
+                                                <action selector="LastDay:" destination="fa4-lZ-bUo" id="C4V-ck-HjF"/>
                                             </connections>
-                                        </button>
-                                    </barButtonItem>
-                                    <barButtonItem key="rightBarButtonItem" style="plain" id="cV0-VJ-pZ4">
-                                        <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="OrJ-MW-XdV">
-                                            <rect key="frame" x="276" y="7" width="83" height="30"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <state key="normal" title="Next">
-                                                <color key="titleColor" red="0.58072251080000004" green="0.066734083" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            </state>
-                                        </button>
+                                        </barButtonItem>
+                                    </leftBarButtonItems>
+                                    <barButtonItem key="rightBarButtonItem" title="Next Day" id="7oD-yf-tS5">
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
-                                            <action selector="nextDay:" destination="fa4-lZ-bUo" id="8Qc-m9-TJu"/>
+                                            <action selector="nextDay:" destination="fa4-lZ-bUo" id="wyg-L2-feb"/>
                                         </connections>
                                     </barButtonItem>
                                 </navigationItem>
@@ -444,13 +429,46 @@
                             <outlet property="delegate" destination="fa4-lZ-bUo" id="UG2-JT-7ye"/>
                         </connections>
                     </tableView>
+                    <toolbarItems>
+                        <barButtonItem title="Item" id="B6E-BM-1DQ"/>
+                    </toolbarItems>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="navBar" destination="3L4-lb-xS8" id="YS9-YY-hNJ"/>
+                        <outlet property="tableTable" destination="1ZC-vT-1q5" id="dVT-fv-qNB"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Iot-0y-E3g" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="573.60000000000002" y="96.7016491754123"/>
+        </scene>
+        <!--Table View Controller-->
+        <scene sceneID="yLJ-Zf-Mze">
+            <objects>
+                <tableViewController id="xf5-W4-31s" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="AIc-9H-a1U">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="jP1-X8-WVy">
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="jP1-X8-WVy" id="wEL-Bp-vbR">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="xf5-W4-31s" id="JpF-PD-8kc"/>
+                            <outlet property="delegate" destination="xf5-W4-31s" id="nv0-Wu-Ndk"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5O9-lk-nXA" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1764" y="86"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
