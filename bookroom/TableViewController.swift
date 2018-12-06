@@ -138,6 +138,8 @@ class TableViewController: UITableViewController {
      override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellID", for: indexPath)
         
+        var breytalit = false
+        
         let toDate = Date()
         let formatter = DateFormatter()
         formatter.dateFormat = "dd.MM.yyyy HH:mm"
@@ -154,28 +156,24 @@ class TableViewController: UITableViewController {
             }
             else {
                 colorPicker.append(colorDates(dateTime: strTime[i], uiColor: UIColor.green))
+                Database.database().reference(withPath: "Room 3").child(String(format: "%.0f", dateInt[i])).observeSingleEvent(of: .value, with: { (snapshot) in
+                    if snapshot.exists() {
+                        print("loob not ")
+                        breytalit = true
+                        //                  self.colorPicker.append(colorDates(dateTime: self.strTime[self.co], uiColor: UIColor.red))
+                    } else {
+                        // self.notavail.isHidden = true
+                        print("loop avail bit")
+                        //                    self.colorPicker.append(colorDates(dateTime: self.strTime[self.co], uiColor: UIColor.green))
+                    }})
+                if breytalit == true{
+                    print("breyta lit biiiiiitch", breytalit)
+                    self.colorPicker.append(colorDates(dateTime: strTime[i], uiColor: UIColor.red))
+                }
             }
         }
-   
         
-       /* print("cocococococococo", co)
-        
-        if (strTime[co] > todayTime) {
-            print("HÆÆÆÆÆÆÆÆÆÆÆ", strTime[co])
-            Database.database().reference(withPath: "Room 3").child(String(format: "%.0f", dateInt[co])).observeSingleEvent(of: .value, with: { (snapshot) in
-                if snapshot.exists() {
-                    print(self.strTime[self.co])
-                    print("loob not ")
-                    self.colorPicker.append(colorDates(dateTime: self.strTime[self.co], uiColor: UIColor.red))
-                } else {
-                    print(self.strTime[self.co])
-                    // self.notavail.isHidden = true
-                    print("loop avail bit")
-                    self.colorPicker.append(colorDates(dateTime: self.strTime[self.co], uiColor: UIColor.green))
-                }})
-        }
-        
-        co = co + 1*/
+        co = co + 1
         
         
         //let times = self.times[indexPath.row]
