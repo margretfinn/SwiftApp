@@ -142,7 +142,19 @@ class TableViewController: UITableViewController {
             dagsetning = dagLok[i].timeIntervalSince1970
             dateInt.append(dagsetning)
         }
-
+        
+       /* for i in 0...31 {
+            if (strTime[i] > timiIDag) {
+                Database.database().reference(withPath: "Room 3").child(String(format: "%.0f", dateInt[co])).observeSingleEvent(of: .value, with: { (snapshot) in
+                    if snapshot.exists() {
+                        print(self.strTime[i])
+                        print("loob not ")
+                    } else {
+                        print("loop avail bit")
+                        print(self.strTime[i])
+                    }})
+            }
+        }
         
         for i in 0...31 {
             if (strTime[i] > timiIDag) {
@@ -155,7 +167,7 @@ class TableViewController: UITableViewController {
                         print(self.strTime[i])
                     }})
             }
-        }
+        }*/
 
         
         if(today == Anyday){
