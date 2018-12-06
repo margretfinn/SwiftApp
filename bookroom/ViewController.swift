@@ -108,7 +108,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //notavail.isHidden = true
+        notavail.isHidden = true
         
         //        let ref = Database.database().reference()
         
@@ -209,7 +209,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             Database.database().reference(withPath: self.txtRoom.text!).child(String(format: "%.0f", dateInt)).observeSingleEvent(of: .value, with: { (snapshot) in
                 if snapshot.exists() {
                     print(self.txtRoom.text! + " is not available at ", realDay!)
-                    //self.notavail.isHidden = false
+                    self.notavail.isHidden = false
                     counter = bookh
                     cantbook = true
                     print("cantbook", cantbook)
@@ -252,10 +252,10 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                 Database.database().reference(withPath: self.txtRoom.text!).child(String(format: "%.0f", dateInt)).observeSingleEvent(of: .value, with: { (snapshot) in
                     if snapshot.exists() {
                         print(self.txtRoom.text! + " is not available at ", realDay2!)
-                       // self.notavail.isHidden = false
+                        self.notavail.isHidden = false
                         print("bóka ekki", cantbook)
                     } else if cantbook == false{
-                       // self.notavail.isHidden = true
+                        self.notavail.isHidden = true
                         print("bóóóóóóóókaaaaaa biiitch")
                         Database.database().reference(withPath: self.txtRoom.text!).child(String(format: "%.0f", dateInt)).setValue(["available": false, "username": self.txtUsername.text!])
                     }})
