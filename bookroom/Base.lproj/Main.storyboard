@@ -293,6 +293,12 @@
                                     <segue destination="fa4-lZ-bUo" kind="show" id="bNB-rm-Xud"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ErrorLabel" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OWA-i1-SyG">
+                                <rect key="frame" x="40" y="662" width="305" height="20.333333333333371"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Room booked!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bNp-bh-KhS" userLabel="Booked">
                                 <rect key="frame" x="132" y="646" width="110.66666666666669" height="20.333333333333371"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -333,8 +339,11 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="6VP-Ca-BIG" secondAttribute="trailing" constant="166" id="dFZ-l7-jgK"/>
                             <constraint firstItem="HoX-PT-C6t" firstAttribute="centerX" secondItem="wuK-qX-8Ku" secondAttribute="centerX" id="gzw-my-0rU"/>
                             <constraint firstItem="lGX-2x-kgO" firstAttribute="top" secondItem="HoX-PT-C6t" secondAttribute="bottom" constant="18" id="h2A-N6-K05"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="OWA-i1-SyG" secondAttribute="trailing" constant="30" id="jAv-bU-ZG8"/>
                             <constraint firstItem="HoX-PT-C6t" firstAttribute="top" secondItem="HfH-k2-0hH" secondAttribute="bottom" constant="9" id="k4M-Jt-f06"/>
+                            <constraint firstItem="OWA-i1-SyG" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="40" id="mj9-PH-xCO"/>
                             <constraint firstItem="bNp-bh-KhS" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="132" id="ms2-s8-Huc"/>
+                            <constraint firstItem="OWA-i1-SyG" firstAttribute="top" secondItem="cZt-9W-XJ3" secondAttribute="bottom" constant="50" id="o5b-uL-LUH"/>
                             <constraint firstItem="HoX-PT-C6t" firstAttribute="trailing" secondItem="5FV-lg-tj2" secondAttribute="trailing" id="pm4-Bf-mjp"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="nNj-kQ-c0r" secondAttribute="trailing" constant="166" id="qGg-VU-gWG"/>
                             <constraint firstItem="Yep-wE-PZl" firstAttribute="centerY" secondItem="wuK-qX-8Ku" secondAttribute="centerY" id="qTc-ud-AJV"/>
@@ -350,6 +359,7 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="ErrorLabel" destination="OWA-i1-SyG" id="X4o-vU-fTI"/>
                         <outlet property="MonthLabel" destination="wuK-qX-8Ku" id="bnC-L3-U05"/>
                         <outlet property="booked" destination="bNp-bh-KhS" id="fQO-T5-IVI"/>
                         <outlet property="calend" destination="HoX-PT-C6t" id="x6Q-KN-xZX"/>

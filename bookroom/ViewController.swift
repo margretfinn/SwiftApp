@@ -27,6 +27,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     @IBOutlet weak var hours: UILabel!
     
+    @IBOutlet weak var ErrorLabel: UILabel!
+    
     @IBAction func stepperhours(_ sender: UIStepper) {
         hours.text = String(sender.value)
     }
@@ -152,6 +154,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         //Hiding the error label
         notavail.isHidden = true
         booked.isHidden = true
+        ErrorLabel.isHidden = true
         
         //Fetching the database for all the unavalabilities
         fetchUser()
@@ -194,112 +197,118 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
 
 /**************************************Booking A Room*************************************/
     @IBAction func btnBook () {
-        self.cantbook = false
-        var heildarBokun: [Bool] = []
         
-        //Takes how many hours you want to book
-        let inthours = hours.text!
-        let inth = (inthours as NSString).integerValue
-        
-        //Double the hours, because we are working with 30 min slots
-        let bookh = inth * 2
-        
-        //Gets the date that was picked and transfers it to seconds
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd/MM/yyyy HH:mm"
-        dateFormatter.timeZone = .current
-        let bday = dateFormatter.date(from: txtDate.text!)
-        var realDay = bday?.addingTimeInterval(3600)
-        var realDay2 = realDay
-        
-        //When booking the hours and putting it and searching in the database
-        var counter = 0
-        while counter < bookh {
-            // date to double
-            var dateInt = Double()
-            dateInt = realDay!.timeIntervalSince1970
-    
-            // double to date
-            realDay = Date(timeIntervalSince1970: dateInt)
+        if ((txtUsername.text?.isEmpty)! || (txtDate.text?.isEmpty)! || (txtRoom.text?.isEmpty)!){
+            ErrorLabel.isHidden = false
+            ErrorLabel.text = "The necessary fields are not filled out"
+        } else {
+            ErrorLabel.isHidden = true
+            self.cantbook = false
+            var heildarBokun: [Bool] = []
             
-            //Checking the Database
-            Database.database().reference(withPath: self.txtRoom.text!).child(String(format: "%.0f", dateInt)).observeSingleEvent(of: .value, with: { (snapshot) in
-                if snapshot.exists() {
-                    // Prints in console that the room is not available
-                    print(self.txtRoom.text! + " is not available at ", realDay!)
-                    // Shows the error message
-                    self.notavail.isHidden = false
-                    // Hides the booking message
-                    self.booked.isHidden = true
-                    // Appends true to the bookingarray
-                    heildarBokun.append(true)
-                    // Increases the counter to break the while-loop
-                    counter = bookh
-                    // Cantbook variable to true
-                    self.cantbook = true
-                // If the room is not booked
-                } else if self.cantbook == false {
-                    // Hides the error message
-                    self.notavail.isHidden = true
-                    // Shows the booking message
-                    self.booked.isHidden = false
-                    // Cantbook variable to false
-                    self.cantbook = false
-                    // Appends false to the bookingarray
-                    heildarBokun.append(false)
-                }
-            })
+            //Takes how many hours you want to book
+            let inthours = hours.text!
+            let inth = (inthours as NSString).integerValue
             
-            // Add half an hour
-            realDay = realDay?.addingTimeInterval(1800)
+            //Double the hours, because we are working with 30 min slots
+            let bookh = inth * 2
             
-            // Increasing the counter
-            counter = counter + 1
-        }
-        
-        var counter2 = 0
-        
-        // If the booking array doesn't contain true then we can book
-        if !heildarBokun.contains(true){
-            while counter2 < bookh{
-                
+            //Gets the date that was picked and transfers it to seconds
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd/MM/yyyy HH:mm"
+            dateFormatter.timeZone = .current
+            let bday = dateFormatter.date(from: txtDate.text!)
+            var realDay = bday?.addingTimeInterval(3600)
+            var realDay2 = realDay
+            
+            //When booking the hours and putting it and searching in the database
+            var counter = 0
+            while counter < bookh {
                 // date to double
                 var dateInt = Double()
-                dateInt = realDay2!.timeIntervalSince1970
-                
+                dateInt = realDay!.timeIntervalSince1970
+        
                 // double to date
-                realDay2 = Date(timeIntervalSince1970: dateInt)
+                realDay = Date(timeIntervalSince1970: dateInt)
                 
-                // Database.database().reference(withPath: self.txtRoom.text!) -> path to Room2 or Room3
+                //Checking the Database
                 Database.database().reference(withPath: self.txtRoom.text!).child(String(format: "%.0f", dateInt)).observeSingleEvent(of: .value, with: { (snapshot) in
                     if snapshot.exists() {
                         // Prints in console that the room is not available
-                        print(self.txtRoom.text! + " is not available at ", realDay2!)
+                        print(self.txtRoom.text! + " is not available at ", realDay!)
                         // Shows the error message
                         self.notavail.isHidden = false
                         // Hides the booking message
                         self.booked.isHidden = true
+                        // Appends true to the bookingarray
+                        heildarBokun.append(true)
+                        // Increases the counter to break the while-loop
+                        counter = bookh
+                        // Cantbook variable to true
+                        self.cantbook = true
                     // If the room is not booked
-                    } else if self.cantbook == false{
+                    } else if self.cantbook == false {
                         // Hides the error message
                         self.notavail.isHidden = true
                         // Shows the booking message
                         self.booked.isHidden = false
-                        // Booking the room
-                        Database.database().reference(withPath: self.txtRoom.text!).child(String(format: "%.0f", dateInt)).setValue(["available": false, "username": self.txtUsername.text!])
-                    }})
-                
+                        // Cantbook variable to false
+                        self.cantbook = false
+                        // Appends false to the bookingarray
+                        heildarBokun.append(false)
+                    }
+                })
+            
                 // Add half an hour
-                realDay2 = realDay2?.addingTimeInterval(1800)
+                realDay = realDay?.addingTimeInterval(1800)
                 
                 // Increasing the counter
-                counter2 = counter2 + 1
+                counter = counter + 1
             }
+            
+            var counter2 = 0
+        
+            // If the booking array doesn't contain true then we can book
+            if !heildarBokun.contains(true){
+                while counter2 < bookh{
+                    
+                    // date to double
+                    var dateInt = Double()
+                    dateInt = realDay2!.timeIntervalSince1970
+                    
+                    // double to date
+                    realDay2 = Date(timeIntervalSince1970: dateInt)
+                    
+                    // Database.database().reference(withPath: self.txtRoom.text!) -> path to Room2 or Room3
+                    Database.database().reference(withPath: self.txtRoom.text!).child(String(format: "%.0f", dateInt)).observeSingleEvent(of: .value, with: { (snapshot) in
+                        if snapshot.exists() {
+                            // Prints in console that the room is not available
+                            print(self.txtRoom.text! + " is not available at ", realDay2!)
+                            // Shows the error message
+                            self.notavail.isHidden = false
+                            // Hides the booking message
+                            self.booked.isHidden = true
+                        // If the room is not booked
+                        } else if self.cantbook == false{
+                            // Hides the error message
+                            self.notavail.isHidden = true
+                            // Shows the booking message
+                            self.booked.isHidden = false
+                            // Booking the room
+                            Database.database().reference(withPath: self.txtRoom.text!).child(String(format: "%.0f", dateInt)).setValue(["available": false, "username": self.txtUsername.text!])
+                        }})
+                    
+                    // Add half an hour
+                    realDay2 = realDay2?.addingTimeInterval(1800)
+                    
+                    // Increasing the counter
+                    counter2 = counter2 + 1
+                }
+            }
+        
+            counter2 = 0
+            counter = 0
         }
-        
-        counter2 = 0
-        counter = 0
-        
         //        ref.childByAutoId().setValue(["date": txtDate.text!, "room": txtRoom.text!, "username": txtUsername.text!, "duration": bookh])
     }
 /**************************************Booking A Room*************************************/
