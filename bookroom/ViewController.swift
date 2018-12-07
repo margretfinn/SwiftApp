@@ -184,7 +184,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         dateFormatter.dateFormat = "dd/MM/yyyy HH:mm"
         pickedDate = datePicker.date
         txtDate.text = dateFormatter.string(from: datePicker.date)
-        print("kemur rangt", datePicker.date)
     }
     
     @objc func dismissPicker() {
@@ -214,7 +213,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         //When booking the hours and putting it and searching in the database
         var counter = 0
         while counter < bookh {
-            print("EFSTcantbook", cantbook)
             // date to double
             var dateInt = Double()
             dateInt = realDay!.timeIntervalSince1970
@@ -229,31 +227,22 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                     self.notavail.isHidden = false
                     counter = bookh
                     self.cantbook = true
-                    print("cantbook", self.cantbook)
                 } else if self.cantbook == false {
                     print(self.cantbook)
-                    print("hægt að bókaaa")
                 }
             })
             
             // add half an hour
             realDay = realDay?.addingTimeInterval(1800)
-            print(realDay!)
             
             counter = counter + 1
-            print("counter", counter, "bookh", bookh)
         }
         
         var counter2 = 0
+        
         // Book if the room is available
-        
-        print("tekka hvort þetta sé cantbook eða ekki", cantbook)
-        
-        if cantbook == true{
-            print("getumekkibókað")
-        } else if cantbook == false{
+        if cantbook == false{
             while counter2 < bookh{
-                
                 // date to double
                 var dateInt = Double()
                 dateInt = realDay2!.timeIntervalSince1970
@@ -267,25 +256,19 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                     if snapshot.exists() {
                         print(self.txtRoom.text! + " is not available at ", realDay2!)
                         self.notavail.isHidden = false
-                        print("bóka ekki", self.cantbook)
                         self.avaToday.append("Bokað")
                     } else if self.cantbook == false{
                         self.notavail.isHidden = true
-                        print("bóóóóóóóókaaaaaa biiitch")
                         Database.database().reference(withPath: self.txtRoom.text!).child(String(format: "%.0f", dateInt)).setValue(["available": false, "username": self.txtUsername.text!])
                     }})
 //                print(dateInt)
                 
                 // add half an hour
                 realDay2 = realDay2?.addingTimeInterval(1800)
-                print("realday inni í seinni", realDay2!)
                 
                 counter2 = counter2 + 1
             }
         }
-        
-        counter = 0
-        print("**************************************************")
         //        ref.childByAutoId().setValue(["date": txtDate.text!, "room": txtRoom.text!, "username": txtUsername.text!, "duration": bookh])
     }
 /**************************************Booking A Room*************************************/
@@ -406,9 +389,15 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "calend", for: indexPath) as! DateCollectionViewCell
        
-        if ((indexPath.row + 1 - NumberOfEmptyBox < day && currentMonth == Months[calender.component(.month, from: date) - 1])){
+        if (indexPath.row + 1 - NumberOfEmptyBox < day && currentMonth == Months[calender.component(.month, from: date) - 1] && year <= calender.component(.year, from: date)){
             cell.backgroundColor = UIColor.lightGray
-        }else{
+        } else if year < calender.component(.year, from: date) {
+            cell.backgroundColor = UIColor.lightGray
+        } else if currentMonth > Months[calender.component(.month, from: date) - 1] && year <= calender.component(.year, from: date) {
+            cell.backgroundColor = UIColor.lightGray
+        } else if year > calender.component(.year, from: date){
+            cell.backgroundColor = UIColor.green
+        } else if indexPath.row + 1 - NumberOfEmptyBox > day && currentMonth == Months[calender.component(.month, from: date) - 1] && year <= calender.component(.year, from: date) {
             cell.backgroundColor = UIColor.green
         }
         
@@ -448,8 +437,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                     print("MEIRA EN 20")
                     cell.backgroundColor = UIColor.red
                 }
-                }
             }
+        }
         /*if currentMonth == Months[calender.component(.month, from: date) - 1] && year == calender.component(.year, from: date) && indexPath.row + 1 - NumberOfEmptyBox == day{
             cell.backgroundColor = UIColor.red
             // cell.Circle.isHidden = false
