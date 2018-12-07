@@ -18,6 +18,7 @@
 		6227A84A21A6AA060007209A /* bookroomUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6227A84921A6AA060007209A /* bookroomUITests.swift */; };
 		6227A85821A6B5240007209A /* DateCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6227A85721A6B5240007209A /* DateCollectionViewCell.swift */; };
 		6227A85A21A6B6E60007209A /* CalendarVars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6227A85921A6B6E60007209A /* CalendarVars.swift */; };
+		6276F90521B9C5BA001FB180 /* AvDateBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6276F90421B9C5BA001FB180 /* AvDateBase.swift */; };
 		62B3C3BB21A8491300A23FCB /* WeekViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B3C3BA21A8491300A23FCB /* WeekViewController.swift */; };
 		62CEADBE21AAE712009EFA55 /* WeekDataCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62CEADBD21AAE712009EFA55 /* WeekDataCollectionViewCell.swift */; };
 		62D1171E21B832E5005A9C12 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D1171D21B832E5005A9C12 /* Color.swift */; };
@@ -66,6 +67,7 @@
 		6227A84B21A6AA060007209A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6227A85721A6B5240007209A /* DateCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateCollectionViewCell.swift; sourceTree = "<group>"; };
 		6227A85921A6B6E60007209A /* CalendarVars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarVars.swift; sourceTree = "<group>"; };
+		6276F90421B9C5BA001FB180 /* AvDateBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvDateBase.swift; sourceTree = "<group>"; };
 		62B3C3BA21A8491300A23FCB /* WeekViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekViewController.swift; sourceTree = "<group>"; };
 		62CEADBD21AAE712009EFA55 /* WeekDataCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekDataCollectionViewCell.swift; sourceTree = "<group>"; };
 		62D1171D21B832E5005A9C12 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
@@ -147,6 +149,7 @@
 				6227A82921A6AA040007209A /* AppDelegate.swift */,
 				6210316A21AC4F2B00D7C019 /* Model.xcdatamodeld */,
 				6227A82B21A6AA040007209A /* ViewController.swift */,
+				6276F90421B9C5BA001FB180 /* AvDateBase.swift */,
 				62D1172121B99E1E005A9C12 /* DateInt.swift */,
 				6227A85921A6B6E60007209A /* CalendarVars.swift */,
 				62B3C3BA21A8491300A23FCB /* WeekViewController.swift */,
@@ -419,6 +422,7 @@
 				6210316C21AC4F2B00D7C019 /* Model.xcdatamodeld in Sources */,
 				6227A85821A6B5240007209A /* DateCollectionViewCell.swift in Sources */,
 				6227A82A21A6AA040007209A /* AppDelegate.swift in Sources */,
+				6276F90521B9C5BA001FB180 /* AvDateBase.swift in Sources */,
 				62D1172221B99E1E005A9C12 /* DateInt.swift in Sources */,
 				EDDDD42B21AF310C00E2BEA6 /* ListViewController.swift in Sources */,
 				EDB9014C21B0395300896881 /* TableViewController.swift in Sources */,
