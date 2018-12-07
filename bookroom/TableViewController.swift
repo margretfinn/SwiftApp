@@ -43,7 +43,7 @@ class TableViewController: UITableViewController {
     var colorPicker: [(colorDates)] = []
     
     var availab = "available"
-//
+
     var hellosistahh = ViewController();
     
     var intNamesTwo: [String] = []
@@ -59,7 +59,6 @@ class TableViewController: UITableViewController {
         // fá daginn í dag
       //  let dateidag = Date()
         
-        // print("dagurinn í dag", dateidag)
       
         let formatter = DateFormatter()
         formatter.dateFormat = "dd/MM/yyyy HH:mm"
@@ -83,33 +82,13 @@ class TableViewController: UITableViewController {
         dateFormatter.dateFormat = "HH:mm"
         timePicker?.date = dateFormatter.date(from: "08:00")!
         pickedTime  = ((timePicker?.date)!)
- 
-        // 08:00-23:30 as date
-        for _ in 0...31{
-            times.append(pickedTime)
-            pickedTime = pickedTime + 1800
-        }
-        
-        
-        
-//        for _ in 0...31{
-//            changeCol.append(false)
-//        }
-  
-      //  txtDate.text = dateFormatter.string(from: datePicker.date)
-        
+    
         fetchUser()
     }
     
     
     func fetchUser(){
         Database.database().reference().child("Room 1").observe(.childAdded, with: { (snapshot) in
-            /*if let dictonary = snapshot.value as? [String: AnyObject] {
-            let user = AvDateBase()
-            user.userNameBase = dictonary["username"] as? String
-            user.availabilityBase = dictonary["available"] as? Bool
-            print(user.userNameBase ?? "nil",user.availabilityBase ?? false)
-            self.dateBaseArray.append(user)*/
             self.intNamesTwo.append(snapshot.key)
 //            DispatchQueue.main.async {
 //                self.tableView.reloadData()
@@ -117,34 +96,13 @@ class TableViewController: UITableViewController {
         }, withCancel: nil)
     }
     
-    
-    
-    
-    
-    /*private func loadData(array: [Double]) {
-        for i in 0...31 {
-            Database.database().reference(withPath: "Room 3").child(String(format: "%.0f", dateInt[i])).observeSingleEvent(of: .value, with: { (snapshot) in
-                if snapshot.exists() {
-                    self.goodTimes.append(self.strTime[i])
-                    print("loob not ")
-                }
-            })
-        }
-        
-    }*/
-
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-     // #warning Incomplete implementation, return the number of rows
-        //let len = (24-8)*2
-//        print("CCCOOOOOUUNTTTTTTTTT",  intNamesTwo.count)
-        
         return times.count
      }
     
      override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellID", for: indexPath)
         
-//        print("CCCOOOOOUUNTTTTTTTTT",  intNamesTwo.count)
         cell.detailTextLabel?.text! = "available"
         
         let toDate = Date()
@@ -152,7 +110,7 @@ class TableViewController: UITableViewController {
         formatter.dateFormat = "dd/MM/yyyy HH:mm"
         let today = formatter.string(from: toDate)
         let Anyday = formatter.string(from: nextDayTime)
-        let daguridag = today.prefix(10)
+        let daguridag = Anyday.prefix(10)
         let timiIDag = today.suffix(5)
      
         // 08:00-23:30 as string
@@ -181,93 +139,35 @@ class TableViewController: UITableViewController {
             dagsetning = dagLok[i].timeIntervalSince1970
             dateInt.append(dagsetning)
         }
-        
-//        for i in 0...31 {
-//            if (strTime[i] > timiIDag) {
-//                Database.database().reference(withPath: "Room 1").child(String(format: "%.0f", dateInt[indexPath.row])).observeSingleEvent(of: .value, with: { (snapshot) in
-//                    if snapshot.exists() {
-//                        print(self.strTime[i])
-//                        print("loob not ")
-//                        self.availab = "booked"
-//                    } else {
-//                        print("loop avail bit")
-//                        print(self.strTime[i])
-//                    }})
-//            }
-//        }
-        
-        
-        
-        if (self.strTime[indexPath.row] > timiIDag) {
-            Database.database().reference(withPath: "Room 1").child(String(format: "%.0f", self.dateInt[indexPath.row])).observeSingleEvent(of: .value, with: { (snapshot) in
-                if snapshot.exists() {
-                    print(self.strTime[indexPath.row])
-                    print("loob not kkkkk")
-                    self.availab = "booked"
-//                    self.changeCol.append(String(format: "%.0f", self.dateInt[indexPath.row]))
-//                    print("appeeeendinggggg", String(format: "%.0f", self.dateInt[indexPath.row]))
-                    //                    self.colorPicker.append(colorDates(dateTime: self.strTime[indexPath.row], uiColor: UIColor.red))
-                    //                    self.tableView.reloadData()
-                    //                    print("HALLÓÓÓ ELLEN HORFA HEEEEEEEEER", self.changeCol[indexPath.row], self.strTime[indexPath.row], indexPath.row)
-                } else {
-                    print("loop avail bit")
-                    print(self.strTime[indexPath.row])
-                    //                    self.colorPicker.append(colorDates(dateTime: self.strTime[indexPath.row], uiColor: UIColor.green))
-                }})
-            
-        }
-        
-//        if(today == Anyday){
-//            for i in 0...31 {
-//                if (strTime[i] < timiIDag) {
-//                    colorPicker.append(colorDates(dateTime: strTime[i], uiColor: UIColor.lightGray, avail: availab))
-//                } else if cell.detailTextLabel?.text! != nil && cell.detailTextLabel!.text! == "booked"{
-//                    print("hæææ bitch þú er heimsk")
-//                    colorPicker.append(colorDates(dateTime: strTime[i], uiColor: UIColor.red, avail: availab))
-//                }
-//                else {
-//                    self.colorPicker.append(colorDates(dateTime: self.strTime[i], uiColor: UIColor.green, avail: availab))
-//                }
-//            }
-//        }
-//        else {
-//            for i in 0...31 {
-//                colorPicker.append(colorDates(dateTime: strTime[i], uiColor: UIColor.green, avail: availab))
-//            }
-//        }
-//
-//        print("count mothafuuucka", hellosistahh.intNames.count)
-        
-//        print(String(format: "%.0f", self.dateInt[indexPath.row]), "fyror oooooofan")
-//        print("CCCOOOOOUUNTTTTTTTTT",  intNamesTwo.count)
-
+    
         if(today == Anyday){
             if (strTime[indexPath.row] < timiIDag) {
                 colorPicker.append(colorDates(dateTime: strTime[indexPath.row], uiColor: UIColor.lightGray))
             }
             else {
                if intNamesTwo.contains(String(format: "%.0f", self.dateInt[indexPath.row])){
-                    print("HALELÚÚÚÚÚJAAAAAA")
                     self.colorPicker.append(colorDates(dateTime: self.strTime[indexPath.row], uiColor: UIColor.red))
                 }
                else {
-
                     self.colorPicker.append(colorDates(dateTime: self.strTime[indexPath.row], uiColor: UIColor.green))
                 }
             }
         } else {
+            if intNamesTwo.contains(String(format: "%.0f", self.dateInt[indexPath.row])){
+                self.colorPicker.append(colorDates(dateTime: self.strTime[indexPath.row], uiColor: UIColor.red))
+            }
+            else {
+                
                 self.colorPicker.append(colorDates(dateTime: self.strTime[indexPath.row], uiColor: UIColor.green))
+            }
         }
         
         cell.textLabel?.text = colorPicker[indexPath.row].dateTime
         cell.backgroundColor = colorPicker[indexPath.row].uiColor
-//        cell.detailTextLabel?.text = colorPicker[indexPath.row].avail
         return cell
      }
     
     @IBAction func nextDay(_ sender: UIBarButtonItem) {
-        // fá daginn í dag
-        // print("dagurinn í dag", dateidag)
         
         let formatter = DateFormatter()
         formatter.dateFormat = "dd/MM/yyyy HH:mm"
@@ -275,7 +175,6 @@ class TableViewController: UITableViewController {
         let idag = formatter.string(from: nextDayTime)
         let daguridag = idag.prefix(10)
         let dagur = daguridag.prefix(5)
-        print(dagur)
         navBar.title = "\(dagur)"
         colorPicker.removeAll()
         tableView.reloadData()
@@ -284,6 +183,7 @@ class TableViewController: UITableViewController {
     
 
     @IBAction func LastDay(_ sender: UIBarButtonItem) {
+        
         let formatter = DateFormatter()
         formatter.dateFormat = "dd/MM/yyyy HH:mm"
         if(nextDayTime <= todayTime){
@@ -307,76 +207,16 @@ class TableViewController: UITableViewController {
         }
     }
     
-    
-    
-    
-    
-    // MARK: - Table view data source
-
-   /* override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        
-        return 10
-    }*/
-    /*override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        let len = (24-8)*2
-        return len
-    }*/
-
-    /*
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
-        return cell
-    }
-    */
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-w
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+    /*if (self.strTime[indexPath.row] > timiIDag) {
+     Database.database().reference(withPath: "Room 1").child(String(format: "%.0f", self.dateInt[indexPath.row])).observeSingleEvent(of: .value, with: { (snapshot) in
+     if snapshot.exists() {
+     print(self.strTime[indexPath.row])
+     print("loob not kkkkk")
+     self.availab = "booked"
+     } else {
+     print("loop avail bit")
+     print(self.strTime[indexPath.row])
+     }})
+     
+     }*/
 }
