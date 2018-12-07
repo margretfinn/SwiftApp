@@ -18,10 +18,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xha-sd-g03">
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xha-sd-g03">
                                 <rect key="frame" x="124" y="460" width="127" height="56"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.58072251080000004" green="0.066734083" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="56" id="Kh5-AZ-84e"/>
+                                </constraints>
                                 <state key="normal" title="Book a room">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
@@ -29,10 +31,12 @@
                                     <segue destination="BYZ-38-t0r" kind="show" id="Ok9-1u-e9d"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mbf-3C-qfe">
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mbf-3C-qfe">
                                 <rect key="frame" x="123" y="545" width="128" height="56"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.58072251080000004" green="0.066734083" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="56" id="a8g-eP-9dn"/>
+                                </constraints>
                                 <state key="normal" title="Availability">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
@@ -40,12 +44,23 @@
                                     <segue destination="fa4-lZ-bUo" kind="show" id="lXe-dj-qyB"/>
                                 </connections>
                             </button>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="DTU_Logo_Corporate_Red_RGB" translatesAutoresizingMaskIntoConstraints="NO" id="z9C-tY-DVS">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="DTU_Logo_Corporate_Red_RGB" translatesAutoresizingMaskIntoConstraints="NO" id="z9C-tY-DVS">
                                 <rect key="frame" x="90" y="103" width="195" height="266"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Xha-sd-g03" firstAttribute="trailing" secondItem="mbf-3C-qfe" secondAttribute="trailing" id="7wd-Rb-y0Z"/>
+                            <constraint firstItem="mbf-3C-qfe" firstAttribute="top" secondItem="Xha-sd-g03" secondAttribute="bottom" constant="29" id="A7R-4r-vvv"/>
+                            <constraint firstItem="z9C-tY-DVS" firstAttribute="leading" secondItem="yAe-CB-8lc" secondAttribute="leading" constant="90" id="Atb-Tu-q1G"/>
+                            <constraint firstItem="mbf-3C-qfe" firstAttribute="centerX" secondItem="56y-Di-omd" secondAttribute="centerX" id="SAr-ds-EMt"/>
+                            <constraint firstItem="z9C-tY-DVS" firstAttribute="top" secondItem="yAe-CB-8lc" secondAttribute="top" constant="59" id="fkR-fZ-Ooj"/>
+                            <constraint firstItem="z9C-tY-DVS" firstAttribute="centerX" secondItem="Xha-sd-g03" secondAttribute="centerX" id="hNx-0U-WeU"/>
+                            <constraint firstItem="yAe-CB-8lc" firstAttribute="bottom" secondItem="mbf-3C-qfe" secondAttribute="bottom" constant="177" id="lEE-eT-rQO"/>
+                            <constraint firstItem="Xha-sd-g03" firstAttribute="centerX" secondItem="mbf-3C-qfe" secondAttribute="centerX" id="sIe-t7-ZZS"/>
+                            <constraint firstItem="Xha-sd-g03" firstAttribute="top" secondItem="z9C-tY-DVS" secondAttribute="bottom" constant="91" id="xtA-tx-R8m"/>
+                            <constraint firstItem="mbf-3C-qfe" firstAttribute="leading" secondItem="yAe-CB-8lc" secondAttribute="leading" constant="123" id="z1G-fh-WmZ"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="yAe-CB-8lc"/>
                     </view>
                 </viewController>
@@ -279,7 +294,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <navigationBar key="tableHeaderView" contentMode="scaleToFill" id="Eg8-sa-L62">
-                            <rect key="frame" x="0.0" y="0.0" width="336" height="44"/>
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <color key="barTintColor" red="0.58072251080000004" green="0.066734083" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <textAttributes key="titleTextAttributes">
@@ -340,6 +355,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="lXe-dj-qyB"/>
-        <segue reference="Ok9-1u-e9d"/>
+        <segue reference="jgF-t2-7Y5"/>
     </inferredMetricsTieBreakers>
 </document>
