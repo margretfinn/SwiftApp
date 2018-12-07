@@ -26,6 +26,7 @@
 		8587C3E90CB2E20BA95FBF2B /* Pods_bookroomTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D5528A4199BA189BF80CDD2 /* Pods_bookroomTests.framework */; };
 		ED5F95E721AFD81C00380C15 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ED5F95E621AFD81C00380C15 /* GoogleService-Info.plist */; };
 		EDB9014C21B0395300896881 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB9014B21B0395300896881 /* TableViewController.swift */; };
+		EDC5D5E621BAAE6000BC5192 /* FrontPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDC5D5E521BAAE6000BC5192 /* FrontPageViewController.swift */; };
 		EDDDD42B21AF310C00E2BEA6 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDDDD42A21AF310C00E2BEA6 /* ListViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -77,6 +78,7 @@
 		D8A4846A92F33F19A79A92E1 /* Pods-bookroomTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bookroomTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-bookroomTests/Pods-bookroomTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED5F95E621AFD81C00380C15 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		EDB9014B21B0395300896881 /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
+		EDC5D5E521BAAE6000BC5192 /* FrontPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontPageViewController.swift; sourceTree = "<group>"; };
 		EDDDD42A21AF310C00E2BEA6 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		FEA4F86027A270DF629446FD /* Pods-bookroomUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bookroomUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-bookroomUITests/Pods-bookroomUITests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -153,6 +155,7 @@
 				6227A85721A6B5240007209A /* DateCollectionViewCell.swift */,
 				EDDDD42A21AF310C00E2BEA6 /* ListViewController.swift */,
 				6227A82D21A6AA040007209A /* Main.storyboard */,
+				EDC5D5E521BAAE6000BC5192 /* FrontPageViewController.swift */,
 				EDB9014B21B0395300896881 /* TableViewController.swift */,
 				62D1171D21B832E5005A9C12 /* Color.swift */,
 				62CEADBD21AAE712009EFA55 /* WeekDataCollectionViewCell.swift */,
@@ -421,6 +424,7 @@
 				6276F90521B9C5BA001FB180 /* AvDateBase.swift in Sources */,
 				62D1172221B99E1E005A9C12 /* DateInt.swift in Sources */,
 				EDDDD42B21AF310C00E2BEA6 /* ListViewController.swift in Sources */,
+				EDC5D5E621BAAE6000BC5192 /* FrontPageViewController.swift in Sources */,
 				EDB9014C21B0395300896881 /* TableViewController.swift in Sources */,
 				6227A85A21A6B6E60007209A /* CalendarVars.swift in Sources */,
 			);

@@ -256,14 +256,7 @@ class TableViewController: UITableViewController {
                 }
             }
         } else {
-            if intNamesTwo.contains(String(format: "%.0f", self.dateInt[indexPath.row])){
-                print("HALELÚÚÚÚÚJAAAAAA")
-                self.colorPicker.append(colorDates(dateTime: self.strTime[indexPath.row], uiColor: UIColor.red))
-            }
-            else {
-
                 self.colorPicker.append(colorDates(dateTime: self.strTime[indexPath.row], uiColor: UIColor.green))
-            }
         }
         
         cell.textLabel?.text = colorPicker[indexPath.row].dateTime
