@@ -82,6 +82,12 @@ class TableViewController: UITableViewController {
         dateFormatter.dateFormat = "HH:mm"
         timePicker?.date = dateFormatter.date(from: "08:00")!
         pickedTime  = ((timePicker?.date)!)
+        
+        // 08:00-23:30 as date
+        for _ in 0...31{
+            times.append(pickedTime)
+            pickedTime = pickedTime + 1800
+        }
     
         fetchUser()
     }
