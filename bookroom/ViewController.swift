@@ -68,6 +68,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     var bookedDatesInt: [(datesInt)] = []
     var intNames: [String] = []
+    var intArray: [Int] = []
+    
     
     let pickerView = UIPickerView()
     
@@ -96,21 +98,16 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     let roomTypes = ["Room 1"]
     
     func createPickerView(){
-//        let pickerView = UIPickerView()
         pickerView.delegate = self
-    
-        
         txtRoom.inputView = pickerView
     }
     
     func dismissPickerView() {
         let toolBar = UIToolbar()
         toolBar.sizeToFit()
-        
         let doneButton = UIBarButtonItem(title:"Done", style: .plain, target: self, action:#selector(self.dismissKeyboard))
         toolBar.setItems([doneButton], animated: false)
         toolBar.isUserInteractionEnabled = true
-        
         txtRoom.inputAccessoryView = toolBar
     }
     
@@ -122,18 +119,16 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //fetchUser()
-      
-        //        let ref = Database.database().reference()
         
-        //        ref.child("booker/username").setValue("hallo")
-        
+        //Picker View
         createPickerView()
         dismissPickerView()
         
         // should make the first row in the pickerview be default
         pickerView.selectRow(1, inComponent: 0, animated: true)
+        //Picker view done
         
+        //Prints out the month and the year above the Calender
         currentMonth = Months[month]
         MonthLabel.text = "\(currentMonth) \(year)"
         if weekday == 0 {
@@ -141,6 +136,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
         GetStartDateDayPosition()
         
+        //Picking Date and Time
         datePicker = UIDatePicker()
         datePicker?.datePickerMode = .dateAndTime
         datePicker?.locale = NSLocale(localeIdentifier: "en_GB") as Locale
@@ -153,14 +149,13 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         txtDate.inputView = datePicker
         view.addGestureRecognizer(tapGesture)
         
+        //Hiding the error label
         notavail.isHidden = true
         
+        //Fetching the database for all the unavalabilities
         fetchUser()
-        print(AvaCounter)
-        print(intNames.count)
-    
-        
     }
+   
     
     func fetchUser( ) {
        Database.database().reference().child("Room 1").observe(.childAdded, with: { (snapshot) in
@@ -174,13 +169,13 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                     self.loadView()*/
             print(snapshot.key)
             self.intNames.append(snapshot.key)
-            DispatchQueue.main.async {
-                self.AvaCounter = self.intNames.count
+            DispatchQueue.main.async() {
+                self.intArray.append(self.intNames.count)
             }
         }, withCancel: nil)
     }
-    
-    
+
+/**************************************PICKING DATE and TIME *************************************/
     @objc func viewTapped(gestureRecognizer:UITapGestureRecognizer){
         view.endEditing(true)
     }
@@ -194,37 +189,22 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     @objc func dismissPicker() {
-        
         view.endEditing(true)
-        
     }
+/**************************************PICKING DATE and TIME *************************************/
     
+
+/**************************************Booking A Room*************************************/
     @IBAction func btnBook () {
         
-        
-        /*let appDel: AppDelegate = (UIApplication.shared.delegate as! AppDelegate)
-         let context = appDel.persistentContainer.viewContext
-         */
-        
-        // var interval = Double()
-        // var date = NSDate()
-        
-        // date from double:
-        // date = NSDate(timeIntervalSince1970: interval)
-        
-        // double from date:
-        // interval = date.timeIntervalSince1970
-        
+        //Takes how many hours you want to book
         let inthours = hours.text!
         let inth = (inthours as NSString).integerValue
         
+        //Double the hours, because we are working with 30 min slots
         let bookh = inth * 2
         
-        //        let ref = Database.database().reference()
-        //        let r2Ref = Database.database().reference(withPath: "Room 2")
-        //        let r3Ref = Database.database().reference(withPath: "Room 3")
-        
-        
+        //Gets the date that was picked and transfers it to seconds
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd/MM/yyyy HH:mm"
         dateFormatter.timeZone = .current
@@ -232,22 +212,18 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         var realDay = bday?.addingTimeInterval(3600)
         var realDay2 = realDay
         
-        
+        //When booking the hours and putting it and searching in the database
         var counter = 0
         while counter < bookh {
             print("EFSTcantbook", cantbook)
-            
             // date to double
             var dateInt = Double()
             dateInt = realDay!.timeIntervalSince1970
-            
-            // Add to Firebase
-            // ref.childByAutoId().setValue(["date": dateInt, "room": txtRoom.text!, "username": txtUsername.text!, "duration": bookh])
-            
+    
             // double to date
             realDay = Date(timeIntervalSince1970: dateInt)
             
-            // Database.database().reference(withPath: self.txtRoom.text!) -> path to Room2 or Room3
+            //Checking the Database
             Database.database().reference(withPath: self.txtRoom.text!).child(String(format: "%.0f", dateInt)).observeSingleEvent(of: .value, with: { (snapshot) in
                 if snapshot.exists() {
                     print(self.txtRoom.text! + " is not available at ", realDay!)
@@ -316,10 +292,13 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         print("**************************************************")
         //        ref.childByAutoId().setValue(["date": txtDate.text!, "room": txtRoom.text!, "username": txtUsername.text!, "duration": bookh])
     }
+/**************************************Booking A Room*************************************/
     
+/**************************************Next and Back Month*************************************/
     
     @IBAction func Next(_ sender: Any) {
         switch currentMonth {
+        //Check if the year needs to be added
         case "December":
             Direction = 1
             
@@ -334,6 +313,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             calend.reloadData()
             
         default:
+            //Else just add the month
             Direction = 1
             
             GetStartDateDayPosition()
@@ -349,6 +329,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     @IBAction func Back(_ sender: Any) {
         switch currentMonth {
+        //Check it needs to go back a year
         case "January":
             month = 11
             year -= 1
@@ -359,7 +340,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             currentMonth = Months[month]
             MonthLabel.text = "\(currentMonth) \(year)"
             calend.reloadData()
-            
+        //Else just minus a the month
         default:
             month -= 1
             Direction = -1
@@ -371,8 +352,11 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             calend.reloadData()
         }
     }
-    
-    func GetStartDateDayPosition() { //functions gives us the nr of empty boxes
+/**************************************Next and Back Month*************************************/
+
+/**************************************Calender fix*************************************/
+    //functions gives us the nr of empty boxes, that need to be hidden
+    func GetStartDateDayPosition() {
         switch Direction{
         case 0:
             NumberOfEmptyBox = weekday
@@ -416,7 +400,12 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             fatalError()
         }
     }
+/**************************************Calender fix*************************************/
     
+/**************************************Calender color*************************************/
+//Gray for the days in the month that have passed
+//Red for today
+//Green for the other days
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "calend", for: indexPath) as! DateCollectionViewCell
@@ -457,6 +446,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         return cell
     }
-    
+    /**************************************Calender color*************************************/
 }
 
