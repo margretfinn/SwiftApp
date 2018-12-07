@@ -63,14 +63,12 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     var pickedDate = Date()
     
     var avaToday: [String] = []
-
-    //var dateBaseArray = [AvDateBase]()
     
     var bookedDatesInt: [(datesInt)] = []
     
     var intNames: [String] = []
-    var intArray: [Int] = []
     
+    var intArray: [Int] = []
     
     let pickerView = UIPickerView()
     
@@ -194,6 +192,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
 
 /**************************************Booking A Room*************************************/
     @IBAction func btnBook () {
+//        notavail.isHidden = true
+        self.cantbook = false
         
         //Takes how many hours you want to book
         let inthours = hours.text!
@@ -228,6 +228,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                     counter = bookh
                     self.cantbook = true
                 } else if self.cantbook == false {
+                    self.notavail.isHidden = true
+                    self.cantbook = false
                     print(self.cantbook)
                 }
             })
@@ -269,6 +271,10 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                 counter2 = counter2 + 1
             }
         }
+        
+        
+        counter = 0
+        
         //        ref.childByAutoId().setValue(["date": txtDate.text!, "room": txtRoom.text!, "username": txtUsername.text!, "duration": bookh])
     }
 /**************************************Booking A Room*************************************/
