@@ -167,10 +167,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                 self.dateBaseArray.append(user)
                 DispatchQueue.main.async {
                     self.loadView()*/
-            print(snapshot.key)
             self.intNames.append(snapshot.key)
-            DispatchQueue.main.async() {
-                self.intArray.append(self.intNames.count)
+            DispatchQueue.main.async {
+                self.calend.reloadData()
             }
         }, withCancel: nil)
     }
@@ -404,7 +403,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
 //Red for today
 //Green for the other days
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "calend", for: indexPath) as! DateCollectionViewCell
        
         if ((indexPath.row + 1 - NumberOfEmptyBox < day && currentMonth == Months[calender.component(.month, from: date) - 1])){
@@ -434,12 +432,28 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         if Int(cell.DateLabel.text!)! < 1{
             cell.isHidden = true
         }
+        
+        if(intNames.count != 0){
+            if currentMonth == Months[calender.component(.month, from: date) - 1] && year == calender.component(.year, from: date) && indexPath.row + 1 - NumberOfEmptyBox == day{
+                if (intNames.count < 10){
+                    print("Minna en 10 ")
+                    cell.backgroundColor = UIColor.yellow
+                }else if(intNames.count >= 10 && intNames.count <= 20) {
+                    print("inná milli ")
+                    cell.backgroundColor = UIColor.orange
+                }
+                else{
+                    print("MEIRA EN 20")
+                    cell.backgroundColor = UIColor.red
+                }
+            }
+        }
      
-        if currentMonth == Months[calender.component(.month, from: date) - 1] && year == calender.component(.year, from: date) && indexPath.row + 1 - NumberOfEmptyBox == day{
+        /*if currentMonth == Months[calender.component(.month, from: date) - 1] && year == calender.component(.year, from: date) && indexPath.row + 1 - NumberOfEmptyBox == day{
             cell.backgroundColor = UIColor.red
             // cell.Circle.isHidden = false
             //cell.DrawCircle()
-        }
+        }*/
         
         return cell
     }
