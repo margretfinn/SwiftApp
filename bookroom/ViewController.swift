@@ -194,6 +194,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     @IBAction func btnBook () {
 //        notavail.isHidden = true
         self.cantbook = false
+        var heildarBokun: [Bool] = []
         
         //Takes how many hours you want to book
         let inthours = hours.text!
@@ -223,32 +224,43 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             //Checking the Database
             Database.database().reference(withPath: self.txtRoom.text!).child(String(format: "%.0f", dateInt)).observeSingleEvent(of: .value, with: { (snapshot) in
                 if snapshot.exists() {
+                    // Prints in console that the room is not available
                     print(self.txtRoom.text! + " is not available at ", realDay!)
+                    // Shows the error message
                     self.notavail.isHidden = false
+                    // Appends true to the bookingarray
+                    heildarBokun.append(true)
+                    // Increases the counter to break the while-loop
                     counter = bookh
+                    // Cantbook variable to true
                     self.cantbook = true
+                // If the room is not booked
                 } else if self.cantbook == false {
+                    // Hides the error message
                     self.notavail.isHidden = true
+                    // Cantbook variable to false
                     self.cantbook = false
-                    print(self.cantbook)
+                    // Appends false to the bookingarray
+                    heildarBokun.append(false)
                 }
             })
             
-            // add half an hour
+            // Add half an hour
             realDay = realDay?.addingTimeInterval(1800)
             
+            // Increasing the counter
             counter = counter + 1
         }
         
         var counter2 = 0
         
-        // Book if the room is available
-        if cantbook == false{
+        // If the booking array doesn't contain true then we can book
+        if !heildarBokun.contains(true){
             while counter2 < bookh{
+                
                 // date to double
                 var dateInt = Double()
                 dateInt = realDay2!.timeIntervalSince1970
-
                 
                 // double to date
                 realDay2 = Date(timeIntervalSince1970: dateInt)
@@ -256,23 +268,27 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                 // Database.database().reference(withPath: self.txtRoom.text!) -> path to Room2 or Room3
                 Database.database().reference(withPath: self.txtRoom.text!).child(String(format: "%.0f", dateInt)).observeSingleEvent(of: .value, with: { (snapshot) in
                     if snapshot.exists() {
+                        // Prints in console that the room is not available
                         print(self.txtRoom.text! + " is not available at ", realDay2!)
+                        // Shows the error message
                         self.notavail.isHidden = false
-                        self.avaToday.append("Bokað")
+                    // If the room is not booked
                     } else if self.cantbook == false{
+                        // Hides the error message
                         self.notavail.isHidden = true
+                        // Booking the room
                         Database.database().reference(withPath: self.txtRoom.text!).child(String(format: "%.0f", dateInt)).setValue(["available": false, "username": self.txtUsername.text!])
                     }})
-//                print(dateInt)
                 
-                // add half an hour
+                // Add half an hour
                 realDay2 = realDay2?.addingTimeInterval(1800)
                 
+                // Increasing the counter
                 counter2 = counter2 + 1
             }
         }
         
-        
+        counter2 = 0
         counter = 0
         
         //        ref.childByAutoId().setValue(["date": txtDate.text!, "room": txtRoom.text!, "username": txtUsername.text!, "duration": bookh])
