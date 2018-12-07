@@ -44,8 +44,11 @@ class TableViewController: UITableViewController {
     
     var availab = "available"
 //
-//    var hellosistahh = TableViewController();
+    var hellosistahh = ViewController();
     
+    var intNamesTwo: [String] = []
+    
+    var dateBaseArray = [AvDateBase]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -94,7 +97,29 @@ class TableViewController: UITableViewController {
 //        }
   
       //  txtDate.text = dateFormatter.string(from: datePicker.date)
+        
+        fetchUser()
     }
+    
+    
+    func fetchUser(){
+        Database.database().reference().child("Room 1").observe(.childAdded, with: { (snapshot) in
+            /*if let dictonary = snapshot.value as? [String: AnyObject] {
+            let user = AvDateBase()
+            user.userNameBase = dictonary["username"] as? String
+            user.availabilityBase = dictonary["available"] as? Bool
+            print(user.userNameBase ?? "nil",user.availabilityBase ?? false)
+            self.dateBaseArray.append(user)*/
+            self.intNamesTwo.append(snapshot.key)
+//            DispatchQueue.main.async {
+//                self.tableView.reloadData()
+//            }
+        }, withCancel: nil)
+    }
+    
+    
+    
+    
     
     /*private func loadData(array: [Double]) {
         for i in 0...31 {
@@ -111,12 +136,15 @@ class TableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
      // #warning Incomplete implementation, return the number of rows
         //let len = (24-8)*2
+//        print("CCCOOOOOUUNTTTTTTTTT",  intNamesTwo.count)
+        
         return times.count
      }
     
      override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellID", for: indexPath)
         
+//        print("CCCOOOOOUUNTTTTTTTTT",  intNamesTwo.count)
         cell.detailTextLabel?.text! = "available"
         
         let toDate = Date()
@@ -169,25 +197,24 @@ class TableViewController: UITableViewController {
 //        }
         
         
-        DispatchQueue.main.async {
-            if (self.strTime[indexPath.row] > timiIDag) {
-                Database.database().reference(withPath: "Room 1").child(String(format: "%.0f", self.dateInt[indexPath.row])).observeSingleEvent(of: .value, with: { (snapshot) in
-                    if snapshot.exists() {
-                        print(self.strTime[indexPath.row])
-                        print("loob not kkkkk")
-                        self.availab = "booked"
-                        self.changeCol.append(String(format: "%.0f", self.dateInt[indexPath.row]))
-                        print("appeeeendinggggg", String(format: "%.0f", self.dateInt[indexPath.row]))
-                        //                    self.colorPicker.append(colorDates(dateTime: self.strTime[indexPath.row], uiColor: UIColor.red))
-                        //                    self.tableView.reloadData()
-                        //                    print("HALLÓÓÓ ELLEN HORFA HEEEEEEEEER", self.changeCol[indexPath.row], self.strTime[indexPath.row], indexPath.row)
-                    } else {
-                        print("loop avail bit")
-                        print(self.strTime[indexPath.row])
-                        //                    self.colorPicker.append(colorDates(dateTime: self.strTime[indexPath.row], uiColor: UIColor.green))
-                    }})
-                
-            }
+        
+        if (self.strTime[indexPath.row] > timiIDag) {
+            Database.database().reference(withPath: "Room 1").child(String(format: "%.0f", self.dateInt[indexPath.row])).observeSingleEvent(of: .value, with: { (snapshot) in
+                if snapshot.exists() {
+                    print(self.strTime[indexPath.row])
+                    print("loob not kkkkk")
+                    self.availab = "booked"
+//                    self.changeCol.append(String(format: "%.0f", self.dateInt[indexPath.row]))
+//                    print("appeeeendinggggg", String(format: "%.0f", self.dateInt[indexPath.row]))
+                    //                    self.colorPicker.append(colorDates(dateTime: self.strTime[indexPath.row], uiColor: UIColor.red))
+                    //                    self.tableView.reloadData()
+                    //                    print("HALLÓÓÓ ELLEN HORFA HEEEEEEEEER", self.changeCol[indexPath.row], self.strTime[indexPath.row], indexPath.row)
+                } else {
+                    print("loop avail bit")
+                    print(self.strTime[indexPath.row])
+                    //                    self.colorPicker.append(colorDates(dateTime: self.strTime[indexPath.row], uiColor: UIColor.green))
+                }})
+            
         }
         
 //        if(today == Anyday){
@@ -208,17 +235,18 @@ class TableViewController: UITableViewController {
 //                colorPicker.append(colorDates(dateTime: strTime[i], uiColor: UIColor.green, avail: availab))
 //            }
 //        }
+//
+//        print("count mothafuuucka", hellosistahh.intNames.count)
         
-        
-        
-        print("fyror oooooofan", String(format: "%.0f", self.dateInt[indexPath.row]))
+//        print(String(format: "%.0f", self.dateInt[indexPath.row]), "fyror oooooofan")
+//        print("CCCOOOOOUUNTTTTTTTTT",  intNamesTwo.count)
 
         if(today == Anyday){
             if (strTime[indexPath.row] < timiIDag) {
                 colorPicker.append(colorDates(dateTime: strTime[indexPath.row], uiColor: UIColor.lightGray))
             }
             else {
-               if changeCol.contains(String(format: "%.0f", self.dateInt[indexPath.row])){
+               if intNamesTwo.contains(String(format: "%.0f", self.dateInt[indexPath.row])){
                     print("HALELÚÚÚÚÚJAAAAAA")
                     self.colorPicker.append(colorDates(dateTime: self.strTime[indexPath.row], uiColor: UIColor.red))
                 }
@@ -228,7 +256,14 @@ class TableViewController: UITableViewController {
                 }
             }
         } else {
-            colorPicker.append(colorDates(dateTime: strTime[indexPath.row], uiColor: UIColor.green))
+            if intNamesTwo.contains(String(format: "%.0f", self.dateInt[indexPath.row])){
+                print("HALELÚÚÚÚÚJAAAAAA")
+                self.colorPicker.append(colorDates(dateTime: self.strTime[indexPath.row], uiColor: UIColor.red))
+            }
+            else {
+
+                self.colorPicker.append(colorDates(dateTime: self.strTime[indexPath.row], uiColor: UIColor.green))
+            }
         }
         
         cell.textLabel?.text = colorPicker[indexPath.row].dateTime
@@ -247,6 +282,7 @@ class TableViewController: UITableViewController {
         let idag = formatter.string(from: nextDayTime)
         let daguridag = idag.prefix(10)
         let dagur = daguridag.prefix(5)
+        print(dagur)
         navBar.title = "\(dagur)"
         colorPicker.removeAll()
         tableView.reloadData()

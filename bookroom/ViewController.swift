@@ -64,9 +64,10 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     var avaToday: [String] = []
 
-    var dateBaseArray = [AvDateBase]()
+    //var dateBaseArray = [AvDateBase]()
     
     var bookedDatesInt: [(datesInt)] = []
+    
     var intNames: [String] = []
     
     let pickerView = UIPickerView()
@@ -280,13 +281,10 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         } else if cantbook == false{
             while counter2 < bookh{
                 
-                //                print(realDay2!)
                 // date to double
                 var dateInt = Double()
                 dateInt = realDay2!.timeIntervalSince1970
-                
-                // Add to Firebase
-                //            ref.childByAutoId().setValue(["date": dateInt, "room": txtRoom.text!, "username": txtUsername.text!, "duration": bookh])
+
                 
                 // double to date
                 realDay2 = Date(timeIntervalSince1970: dateInt)
