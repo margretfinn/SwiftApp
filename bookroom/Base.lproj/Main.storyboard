@@ -293,10 +293,17 @@
                                     <segue destination="fa4-lZ-bUo" kind="show" id="bNB-rm-Xud"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Room booked!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bNp-bh-KhS" userLabel="Booked">
+                                <rect key="frame" x="132" y="646" width="110.66666666666669" height="20.333333333333371"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.30840110780000002" green="0.5618229508" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="vOn-Jn-NCW" firstAttribute="leading" secondItem="lGX-2x-kgO" secondAttribute="trailing" constant="25.000000000000028" id="2BS-bc-h93"/>
+                            <constraint firstItem="bNp-bh-KhS" firstAttribute="top" secondItem="cZt-9W-XJ3" secondAttribute="bottom" constant="34" id="2wD-PV-pe7"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="cZt-9W-XJ3" secondAttribute="trailing" constant="210" id="62a-UR-TFc"/>
                             <constraint firstItem="evj-i1-q1U" firstAttribute="top" secondItem="HoX-PT-C6t" secondAttribute="bottom" constant="23.333333333333371" id="7aG-2d-1Gz"/>
                             <constraint firstItem="h55-EY-qs7" firstAttribute="top" secondItem="5FV-lg-tj2" secondAttribute="bottom" constant="54.666666666666742" id="8bz-bt-xi6"/>
@@ -327,20 +334,24 @@
                             <constraint firstItem="HoX-PT-C6t" firstAttribute="centerX" secondItem="wuK-qX-8Ku" secondAttribute="centerX" id="gzw-my-0rU"/>
                             <constraint firstItem="lGX-2x-kgO" firstAttribute="top" secondItem="HoX-PT-C6t" secondAttribute="bottom" constant="18" id="h2A-N6-K05"/>
                             <constraint firstItem="HoX-PT-C6t" firstAttribute="top" secondItem="HfH-k2-0hH" secondAttribute="bottom" constant="9" id="k4M-Jt-f06"/>
+                            <constraint firstItem="bNp-bh-KhS" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="132" id="ms2-s8-Huc"/>
                             <constraint firstItem="HoX-PT-C6t" firstAttribute="trailing" secondItem="5FV-lg-tj2" secondAttribute="trailing" id="pm4-Bf-mjp"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="nNj-kQ-c0r" secondAttribute="trailing" constant="166" id="qGg-VU-gWG"/>
                             <constraint firstItem="Yep-wE-PZl" firstAttribute="centerY" secondItem="wuK-qX-8Ku" secondAttribute="centerY" id="qTc-ud-AJV"/>
                             <constraint firstItem="h55-EY-qs7" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="25:203" id="tbx-Zc-zD4"/>
+                            <constraint firstItem="bNp-bh-KhS" firstAttribute="top" secondItem="h55-EY-qs7" secondAttribute="bottom" constant="33.666666666666742" id="tql-TL-wrR"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="tN9-tP-bEu" secondAttribute="trailing" constant="10.666666666666686" id="v00-Mx-AYM"/>
                             <constraint firstItem="nNj-kQ-c0r" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="40" id="vN3-0O-mHa"/>
                             <constraint firstItem="nNj-kQ-c0r" firstAttribute="top" secondItem="6VP-Ca-BIG" secondAttribute="bottom" constant="8" id="vhC-nk-RFV"/>
                             <constraint firstItem="6VP-Ca-BIG" firstAttribute="top" secondItem="lGX-2x-kgO" secondAttribute="bottom" constant="21.999999999999943" id="wBo-XR-sGz"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="evj-i1-q1U" secondAttribute="trailing" constant="59" id="yWA-I6-NK9"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="bNp-bh-KhS" secondAttribute="trailing" constant="132.33333333333331" id="zAp-S4-1wr"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
                         <outlet property="MonthLabel" destination="wuK-qX-8Ku" id="bnC-L3-U05"/>
+                        <outlet property="booked" destination="bNp-bh-KhS" id="fQO-T5-IVI"/>
                         <outlet property="calend" destination="HoX-PT-C6t" id="x6Q-KN-xZX"/>
                         <outlet property="hours" destination="evj-i1-q1U" id="inF-md-sqh"/>
                         <outlet property="notavail" destination="ZU3-Iz-iRc" id="gxc-9t-x9P"/>

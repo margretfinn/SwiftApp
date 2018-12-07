@@ -32,6 +32,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     @IBOutlet weak var notavail: UILabel!
+    @IBOutlet weak var booked: UILabel!
     
     private var datePicker: UIDatePicker?
     private var timePicker: UIDatePicker?
@@ -150,6 +151,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         //Hiding the error label
         notavail.isHidden = true
+        booked.isHidden = true
         
         //Fetching the database for all the unavalabilities
         fetchUser()
@@ -192,7 +194,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
 
 /**************************************Booking A Room*************************************/
     @IBAction func btnBook () {
-//        notavail.isHidden = true
         self.cantbook = false
         var heildarBokun: [Bool] = []
         
@@ -228,6 +229,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                     print(self.txtRoom.text! + " is not available at ", realDay!)
                     // Shows the error message
                     self.notavail.isHidden = false
+                    // Hides the booking message
+                    self.booked.isHidden = true
                     // Appends true to the bookingarray
                     heildarBokun.append(true)
                     // Increases the counter to break the while-loop
@@ -238,6 +241,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                 } else if self.cantbook == false {
                     // Hides the error message
                     self.notavail.isHidden = true
+                    // Shows the booking message
+                    self.booked.isHidden = false
                     // Cantbook variable to false
                     self.cantbook = false
                     // Appends false to the bookingarray
@@ -272,10 +277,14 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                         print(self.txtRoom.text! + " is not available at ", realDay2!)
                         // Shows the error message
                         self.notavail.isHidden = false
+                        // Hides the booking message
+                        self.booked.isHidden = true
                     // If the room is not booked
                     } else if self.cantbook == false{
                         // Hides the error message
                         self.notavail.isHidden = true
+                        // Shows the booking message
+                        self.booked.isHidden = false
                         // Booking the room
                         Database.database().reference(withPath: self.txtRoom.text!).child(String(format: "%.0f", dateInt)).setValue(["available": false, "username": self.txtUsername.text!])
                     }})
