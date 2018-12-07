@@ -41,11 +41,7 @@ class TableViewController: UITableViewController {
     var changeCol: [String] = []
  
     var colorPicker: [(colorDates)] = []
-    
-    var availab = "available"
 
-    var hellosistahh = ViewController();
-    
     var intNamesTwo: [String] = []
     
     var dateBaseArray = [AvDateBase]()
@@ -55,11 +51,7 @@ class TableViewController: UITableViewController {
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
         
-        // ****************************************************
-        // fá daginn í dag
-      //  let dateidag = Date()
-        
-      
+        //Prints out the days availability
         let formatter = DateFormatter()
         formatter.dateFormat = "dd/MM/yyyy HH:mm"
         let idag = formatter.string(from: nextDayTime)
@@ -68,11 +60,7 @@ class TableViewController: UITableViewController {
         let dagur = daguridag.prefix(5)
         navBar.title = "\(dagur)"
         
-        
-        // print("bara dagur í dag", type(of: daguridag))
-        
-        // ****************************************************
-        
+        //Making a timer from 08:00 to 23:30
         timePicker = UIDatePicker()
         timePicker?.datePickerMode = .time
         timePicker?.locale = NSLocale(localeIdentifier: "da_DK") as Locale
@@ -89,6 +77,7 @@ class TableViewController: UITableViewController {
             pickedTime = pickedTime + 1800
         }
     
+        //Fetching the database for all the unavalabilities
         fetchUser()
     }
     
@@ -96,21 +85,19 @@ class TableViewController: UITableViewController {
     func fetchUser(){
         Database.database().reference().child("Room 1").observe(.childAdded, with: { (snapshot) in
             self.intNamesTwo.append(snapshot.key)
-//            DispatchQueue.main.async {
-//                self.tableView.reloadData()
-//            }
         }, withCancel: nil)
     }
     
+    //Return the how many rows should return
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return times.count
      }
     
+    //Making the cell
      override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellID", for: indexPath)
         
-        cell.detailTextLabel?.text! = "available"
-        
+        //Making todays date and the table date
         let toDate = Date()
         let formatter = DateFormatter()
         formatter.dateFormat = "dd/MM/yyyy HH:mm"
@@ -118,7 +105,7 @@ class TableViewController: UITableViewController {
         let Anyday = formatter.string(from: nextDayTime)
         let daguridag = Anyday.prefix(10)
         let timiIDag = today.suffix(5)
-     
+       
         // 08:00-23:30 as string
         for i in 0...31{
             let dateFormatter = DateFormatter()
@@ -127,11 +114,11 @@ class TableViewController: UITableViewController {
         }
         
         // todays date plus 08:00-23:30 as string
-        //print("dagur og tími")
         for i in 0...31{
             dagklukk.append(daguridag + " " + strTime[i])
         }
         
+        //Making string to date and adding one hour
         for i in 0...31{
             let dateForm = DateFormatter()
             dateForm.dateFormat = "dd/MM/yyyy HH:mm"
@@ -139,18 +126,21 @@ class TableViewController: UITableViewController {
             dagLok.append(date!.addingTimeInterval(3600))
         }
         
-        //print("ÞETTA ER ORÐIÐ AÐ DOUBLE")
+        //Making string to double
         var dagsetning = Double()
         for i in 0...31{
             dagsetning = dagLok[i].timeIntervalSince1970
             dateInt.append(dagsetning)
         }
-    
-        if(today == Anyday){
+      
+        //Check if we are working with the todays day
+        if(today.prefix(10) == daguridag){
+            //Checks what time it is today marks grey if the time has passed
             if (strTime[indexPath.row] < timiIDag) {
                 colorPicker.append(colorDates(dateTime: strTime[indexPath.row], uiColor: UIColor.lightGray))
             }
             else {
+                //Checks for availability red for unavailble and green for available
                if intNamesTwo.contains(String(format: "%.0f", self.dateInt[indexPath.row])){
                     self.colorPicker.append(colorDates(dateTime: self.strTime[indexPath.row], uiColor: UIColor.red))
                 }
@@ -158,7 +148,7 @@ class TableViewController: UITableViewController {
                     self.colorPicker.append(colorDates(dateTime: self.strTime[indexPath.row], uiColor: UIColor.green))
                 }
             }
-        } else {
+        }else {
             if intNamesTwo.contains(String(format: "%.0f", self.dateInt[indexPath.row])){
                 self.colorPicker.append(colorDates(dateTime: self.strTime[indexPath.row], uiColor: UIColor.red))
             }
@@ -168,13 +158,14 @@ class TableViewController: UITableViewController {
             }
         }
         
+        //Reads from the colopicker and marks each cell right color and time
         cell.textLabel?.text = colorPicker[indexPath.row].dateTime
         cell.backgroundColor = colorPicker[indexPath.row].uiColor
         return cell
      }
     
     @IBAction func nextDay(_ sender: UIBarButtonItem) {
-        
+        //Adding a dag
         let formatter = DateFormatter()
         formatter.dateFormat = "dd/MM/yyyy HH:mm"
         nextDayTime  = nextDayTime.addingTimeInterval(86400)
@@ -182,21 +173,29 @@ class TableViewController: UITableViewController {
         let daguridag = idag.prefix(10)
         let dagur = daguridag.prefix(5)
         navBar.title = "\(dagur)"
+        //Clean all arrays to make room for the new date
+        dagklukk.removeAll()
+        dagLok.removeAll()
+        dateInt.removeAll()
         colorPicker.removeAll()
         tableView.reloadData()
         tableTable.reloadData()
     }
     
-
     @IBAction func LastDay(_ sender: UIBarButtonItem) {
-        
+        //Going back day
         let formatter = DateFormatter()
         formatter.dateFormat = "dd/MM/yyyy HH:mm"
+        //Not availble to go back in time only the date today
         if(nextDayTime <= todayTime){
             let idag = formatter.string(from: todayTime)
             let daguridag = idag.prefix(10)
             let dagur = daguridag.prefix(5)
             navBar.title = "\(dagur)"
+            //Clean all arrays to make room for the new date
+            dagklukk.removeAll()
+            dagLok.removeAll()
+            dateInt.removeAll()
             colorPicker.removeAll()
             tableView.reloadData()
             tableTable.reloadData()
@@ -207,22 +206,14 @@ class TableViewController: UITableViewController {
             let daguridag = idag.prefix(10)
             let dagur = daguridag.prefix(5)
             navBar.title = "\(dagur)"
+            //Clean all arrays to make room for the new date
+            dagklukk.removeAll()
+            dagLok.removeAll()
+            dateInt.removeAll()
             colorPicker.removeAll()
             tableView.reloadData()
             tableTable.reloadData()
         }
     }
-    
-    /*if (self.strTime[indexPath.row] > timiIDag) {
-     Database.database().reference(withPath: "Room 1").child(String(format: "%.0f", self.dateInt[indexPath.row])).observeSingleEvent(of: .value, with: { (snapshot) in
-     if snapshot.exists() {
-     print(self.strTime[indexPath.row])
-     print("loob not kkkkk")
-     self.availab = "booked"
-     } else {
-     print("loop avail bit")
-     print(self.strTime[indexPath.row])
-     }})
-     
-     }*/
+
 }
