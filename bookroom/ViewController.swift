@@ -402,6 +402,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
 //Gray for the days in the month that have passed
 //Red for today
 //Green for the other days
+    var counter = 0
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "calend", for: indexPath) as! DateCollectionViewCell
        
@@ -433,6 +434,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             cell.isHidden = true
         }
         
+      
         if(intNames.count != 0){
             if currentMonth == Months[calender.component(.month, from: date) - 1] && year == calender.component(.year, from: date) && indexPath.row + 1 - NumberOfEmptyBox == day{
                 if (intNames.count < 10){
@@ -446,9 +448,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                     print("MEIRA EN 20")
                     cell.backgroundColor = UIColor.red
                 }
+                }
             }
-        }
-     
         /*if currentMonth == Months[calender.component(.month, from: date) - 1] && year == calender.component(.year, from: date) && indexPath.row + 1 - NumberOfEmptyBox == day{
             cell.backgroundColor = UIColor.red
             // cell.Circle.isHidden = false
