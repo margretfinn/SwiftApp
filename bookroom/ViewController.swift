@@ -67,13 +67,13 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     var dateBaseArray = [AvDateBase]()
     
     var bookedDatesInt: [(datesInt)] = []
+    var intNames: [String] = []
     
     let pickerView = UIPickerView()
     
     var cantbook = false
     
     var AvaCounter = 0
-        
     
     /**************************************PICKER VIEW*************************************/
     
@@ -120,9 +120,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     /**************************************PICKER VIEW*************************************/
     
     
-  
     override func viewDidLoad() {
         super.viewDidLoad()
+        //fetchUser()
       
         //        let ref = Database.database().reference()
         
@@ -155,28 +155,32 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         notavail.isHidden = true
         
-
         fetchUser()
         
-        var hellosistahh = TableViewController();
-        
-     
+        print(AvaCounter)
+        print(intNames.count)
+
     }
+
     
-    func fetchUser(){
-        Database.database().reference().child("Room 1").observe(.childAdded, with: { (snapshot) in
-            if let dictonary = snapshot.value as? [String: AnyObject] {
+    func fetchUser( ) {
+       Database.database().reference().child("Room 1").observe(.childAdded, with: { (snapshot) in
+            /*if let dictonary = snapshot.value as? [String: AnyObject] {
                 let user = AvDateBase()
                 user.userNameBase = dictonary["username"] as? String
                 user.availabilityBase = dictonary["available"] as? Bool
                 print(user.userNameBase ?? "nil",user.availabilityBase ?? false)
                 self.dateBaseArray.append(user)
                 DispatchQueue.main.async {
-                    print(self.dateBaseArray.count)
-                }
+                    self.loadView()*/
+            print(snapshot.key)
+            self.intNames.append(snapshot.key)
+            DispatchQueue.main.async {
+                self.AvaCounter = self.intNames.count
             }
         }, withCancel: nil)
     }
+    
     
     @objc func viewTapped(gestureRecognizer:UITapGestureRecognizer){
         view.endEditing(true)
@@ -415,8 +419,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "calend", for: indexPath) as! DateCollectionViewCell
         
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "calend", for: indexPath) as! DateCollectionViewCell
+       
         if ((indexPath.row + 1 - NumberOfEmptyBox < day && currentMonth == Months[calender.component(.month, from: date) - 1])){
             cell.backgroundColor = UIColor.lightGray
         }else{
@@ -444,7 +449,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         if Int(cell.DateLabel.text!)! < 1{
             cell.isHidden = true
         }
-        
+     
         if currentMonth == Months[calender.component(.month, from: date) - 1] && year == calender.component(.year, from: date) && indexPath.row + 1 - NumberOfEmptyBox == day{
             cell.backgroundColor = UIColor.red
             // cell.Circle.isHidden = false
