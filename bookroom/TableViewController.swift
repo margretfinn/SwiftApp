@@ -44,8 +44,6 @@ class TableViewController: UITableViewController {
 
     var intNamesTwo: [String] = []
     
-    var dateBaseArray = [AvDateBase]()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
