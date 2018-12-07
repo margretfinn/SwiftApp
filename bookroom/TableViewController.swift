@@ -38,13 +38,13 @@ class TableViewController: UITableViewController {
     var dateInt: [Double] = []
     var array: [Double] = []
     
-    var changeCol: [Double] = []
+    var changeCol: [String] = []
  
     var colorPicker: [(colorDates)] = []
     
-//    var co = 0
-    
     var availab = "available"
+//
+//    var hellosistahh = TableViewController();
     
     
     override func viewDidLoad() {
@@ -87,12 +87,13 @@ class TableViewController: UITableViewController {
             pickedTime = pickedTime + 1800
         }
         
+        
+        
 //        for _ in 0...31{
 //            changeCol.append(false)
 //        }
   
       //  txtDate.text = dateFormatter.string(from: datePicker.date)
-        
     }
     
     /*private func loadData(array: [Double]) {
@@ -167,21 +168,26 @@ class TableViewController: UITableViewController {
 //            }
 //        }
         
-        if (strTime[indexPath.row] > timiIDag) {
-            Database.database().reference(withPath: "Room 1").child(String(format: "%.0f", dateInt[indexPath.row])).observeSingleEvent(of: .value, with: { (snapshot) in
-                if snapshot.exists() {
-                    print(self.strTime[indexPath.row])
-                    print("loob not kkkkk")
-                    self.availab = "booked"
-                    self.changeCol.append(dagsetning)
-                    self.colorPicker.append(colorDates(dateTime: self.strTime[indexPath.row], uiColor: UIColor.red))
-                    //                    print("HALLÓÓÓ ELLEN HORFA HEEEEEEEEER", self.changeCol[indexPath.row], self.strTime[indexPath.row], indexPath.row)
-                } else {
-                    print("loop avail bit")
-                    print(self.strTime[indexPath.row])
-                    self.colorPicker.append(colorDates(dateTime: self.strTime[indexPath.row], uiColor: UIColor.green))
-                }})
-
+        
+        DispatchQueue.main.async {
+            if (self.strTime[indexPath.row] > timiIDag) {
+                Database.database().reference(withPath: "Room 1").child(String(format: "%.0f", self.dateInt[indexPath.row])).observeSingleEvent(of: .value, with: { (snapshot) in
+                    if snapshot.exists() {
+                        print(self.strTime[indexPath.row])
+                        print("loob not kkkkk")
+                        self.availab = "booked"
+                        self.changeCol.append(String(format: "%.0f", self.dateInt[indexPath.row]))
+                        print("appeeeendinggggg", String(format: "%.0f", self.dateInt[indexPath.row]))
+                        //                    self.colorPicker.append(colorDates(dateTime: self.strTime[indexPath.row], uiColor: UIColor.red))
+                        //                    self.tableView.reloadData()
+                        //                    print("HALLÓÓÓ ELLEN HORFA HEEEEEEEEER", self.changeCol[indexPath.row], self.strTime[indexPath.row], indexPath.row)
+                    } else {
+                        print("loop avail bit")
+                        print(self.strTime[indexPath.row])
+                        //                    self.colorPicker.append(colorDates(dateTime: self.strTime[indexPath.row], uiColor: UIColor.green))
+                    }})
+                
+            }
         }
         
 //        if(today == Anyday){
@@ -203,24 +209,25 @@ class TableViewController: UITableViewController {
 //            }
 //        }
         
-        print("dagsetning", dagsetning)
-        if changeCol.contains(dagsetning){
-            print("HAAAAALELÚJA")
-        }
+        
+        
+        print("fyror oooooofan", String(format: "%.0f", self.dateInt[indexPath.row]))
 
         if(today == Anyday){
             if (strTime[indexPath.row] < timiIDag) {
                 colorPicker.append(colorDates(dateTime: strTime[indexPath.row], uiColor: UIColor.lightGray))
             }
             else {
-                if changeCol.contains(dagsetning){
+               if changeCol.contains(String(format: "%.0f", self.dateInt[indexPath.row])){
+                    print("HALELÚÚÚÚÚJAAAAAA")
                     self.colorPicker.append(colorDates(dateTime: self.strTime[indexPath.row], uiColor: UIColor.red))
-                } else {
+                }
+               else {
+
                     self.colorPicker.append(colorDates(dateTime: self.strTime[indexPath.row], uiColor: UIColor.green))
                 }
             }
-        }
-        else {
+        } else {
             colorPicker.append(colorDates(dateTime: strTime[indexPath.row], uiColor: UIColor.green))
         }
         

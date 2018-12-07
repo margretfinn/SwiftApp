@@ -157,11 +157,14 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
 
         fetchUser()
+        
+        var hellosistahh = TableViewController();
+        
      
     }
     
     func fetchUser(){
-        Database.database().reference().child("Room 3").observe(.childAdded, with: { (snapshot) in
+        Database.database().reference().child("Room 1").observe(.childAdded, with: { (snapshot) in
             if let dictonary = snapshot.value as? [String: AnyObject] {
                 let user = AvDateBase()
                 user.userNameBase = dictonary["username"] as? String
@@ -296,7 +299,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                         print("bóóóóóóóókaaaaaa biiitch")
                         Database.database().reference(withPath: self.txtRoom.text!).child(String(format: "%.0f", dateInt)).setValue(["available": false, "username": self.txtUsername.text!])
                     }})
-                //                print(dateInt)
+//                print(dateInt)
                 
                 // add half an hour
                 realDay2 = realDay2?.addingTimeInterval(1800)
@@ -397,7 +400,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
     }
     
-    //Returns the numbers of days in the month + the number of empthy boxes
+    // Returns the numbers of days in the month + the number of empthy boxes
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int{
         switch Direction{
         case 0:
