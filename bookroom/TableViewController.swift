@@ -37,6 +37,8 @@ class TableViewController: UITableViewController {
     
     var dateInt: [Double] = []
     var array: [Double] = []
+    
+    var changeCol: [Double] = []
  
     var colorPicker: [(colorDates)] = []
     
@@ -84,6 +86,10 @@ class TableViewController: UITableViewController {
             times.append(pickedTime)
             pickedTime = pickedTime + 1800
         }
+        
+//        for _ in 0...31{
+//            changeCol.append(false)
+//        }
   
       //  txtDate.text = dateFormatter.string(from: datePicker.date)
         
@@ -109,6 +115,8 @@ class TableViewController: UITableViewController {
     
      override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellID", for: indexPath)
+        
+        cell.detailTextLabel?.text! = "available"
         
         let toDate = Date()
         let formatter = DateFormatter()
@@ -163,12 +171,17 @@ class TableViewController: UITableViewController {
             Database.database().reference(withPath: "Room 1").child(String(format: "%.0f", dateInt[indexPath.row])).observeSingleEvent(of: .value, with: { (snapshot) in
                 if snapshot.exists() {
                     print(self.strTime[indexPath.row])
-                    print("loob not ")
+                    print("loob not kkkkk")
                     self.availab = "booked"
+                    self.changeCol.append(dagsetning)
+                    self.colorPicker.append(colorDates(dateTime: self.strTime[indexPath.row], uiColor: UIColor.red))
+                    //                    print("HALLÓÓÓ ELLEN HORFA HEEEEEEEEER", self.changeCol[indexPath.row], self.strTime[indexPath.row], indexPath.row)
                 } else {
                     print("loop avail bit")
                     print(self.strTime[indexPath.row])
+                    self.colorPicker.append(colorDates(dateTime: self.strTime[indexPath.row], uiColor: UIColor.green))
                 }})
+
         }
         
 //        if(today == Anyday){
@@ -189,20 +202,26 @@ class TableViewController: UITableViewController {
 //                colorPicker.append(colorDates(dateTime: strTime[i], uiColor: UIColor.green, avail: availab))
 //            }
 //        }
+        
+        print("dagsetning", dagsetning)
+        if changeCol.contains(dagsetning){
+            print("HAAAAALELÚJA")
+        }
 
         if(today == Anyday){
             if (strTime[indexPath.row] < timiIDag) {
-                colorPicker.append(colorDates(dateTime: strTime[indexPath.row], uiColor: UIColor.lightGray, avail: availab))
-            } else if cell.detailTextLabel?.text! != nil && cell.detailTextLabel!.text! == "booked"{
-                print("hæææ bitch þú er heimsk")
-                colorPicker.append(colorDates(dateTime: strTime[indexPath.row], uiColor: UIColor.red, avail: availab))
+                colorPicker.append(colorDates(dateTime: strTime[indexPath.row], uiColor: UIColor.lightGray))
             }
             else {
-                self.colorPicker.append(colorDates(dateTime: self.strTime[indexPath.row], uiColor: UIColor.green, avail: availab))
+                if changeCol.contains(dagsetning){
+                    self.colorPicker.append(colorDates(dateTime: self.strTime[indexPath.row], uiColor: UIColor.red))
+                } else {
+                    self.colorPicker.append(colorDates(dateTime: self.strTime[indexPath.row], uiColor: UIColor.green))
+                }
             }
         }
         else {
-            colorPicker.append(colorDates(dateTime: strTime[indexPath.row], uiColor: UIColor.green, avail: availab))
+            colorPicker.append(colorDates(dateTime: strTime[indexPath.row], uiColor: UIColor.green))
         }
         
         cell.textLabel?.text = colorPicker[indexPath.row].dateTime
